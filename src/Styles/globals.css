@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+  --primaryC: #0078D4;
+  --secondaryC: rgb(235, 245, 253);
+  --accentC: #ff5733;
+  --backgroundC: #ffffff;
+  --textC: #333333e8;
+  --borderC: #dadce0;
+  --textTC: #5f6571bc;
+  --lbgC: #4285f40a;
+}
+
+.Inputs:focus~label {
+  font-size: 12px !important;
+  top: -10px !important;
+}
+
+.dropDown {
+  animation: move 0.1s ease-in-out;
+}
