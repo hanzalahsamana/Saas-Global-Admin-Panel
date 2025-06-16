@@ -8,6 +8,7 @@ const Loader = () => {
                 <div className="absolute w-4 h-4 bg-gray-800 rounded-full bottom-0 left-0"></div>
                 <div className="absolute w-4 h-4 bg-gray-800 rounded-full bottom-0 right-0"></div>
             </div>
+            
         </div>
     )
 }
