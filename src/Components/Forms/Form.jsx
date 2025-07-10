@@ -1,28 +1,40 @@
-import React from 'react'
-import Button from '../Actions/Button'
+import React from "react";
+import Button from "../Actions/Button";
+import { Form, Formik } from "formik";
 
-const Form = ({
-    label,
-    children,
-    handleSubmit,
-    loading = false,
-    extra = "",
-    buttonLabel,
-    className = "",
-    encType = 'application/x-www-form-urlencoded' }) => {
+const FormikForm = ({
+  children,
+  handleSubmit,
+  loading = false,
+  buttonLabel,
+  initialValues = {},
+  validationSchema,
+}) => {
+  return (
+    <>
+      <Formik
+        className="space-y-4 w-full"
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {() => {
+          return (
+            <Form className="w-full">
+              {children}
+              <Button
+                type="submit"
+                label={buttonLabel}
+                loading={loading}
+                size="large"
+                className="!mt-[20px]"
+              />
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
+  );
+};
 
-    return (
-        <div className={`bg-(--backgroundC) px-6 py-6 rounded-lg border-[1.5px] border-[#788a9a2c] w-full ${className}`}>
-            <h2 className="text-3xl font-bold mb-4 text-(--textC) text-center">{label}</h2>
-            <form onSubmit={handleSubmit} className="space-y-4" encType={encType}>
-                <div className='space-y-4 py-[8px] bg-(--backgroundC) max-h-[340px] bordr-t border-[#c9c9c98f] overflow-auto customScroll'>
-                {children}
-                </div>
-                <Button type='submit' label={buttonLabel} loading={loading} className='!mt-[20px]' />
-                {extra && extra}
-            </form>
-        </div>
-    )
-}
-
-export default Form;
+export default FormikForm;

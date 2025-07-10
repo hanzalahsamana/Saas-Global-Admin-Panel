@@ -1,20 +1,21 @@
+import Loader from "@/Components/Loader/Loader";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import Loader from "@/components/Loader/loader";
 
 const UnProtectedRoute = (WrappedComponent) => {
   return () => {
+    const { currentUser, loading } = useSelector((state) => state.currentUser);
     const router = useRouter();
-    const { currUser, loading } = useSelector((state) => state.currentUser);
+
     if (loading) {
       return <Loader />;
     }
 
-    if (!currUser) {
-      return <WrappedComponent />;
+    if (currentUser) {
+      router.push("/");
+      return;
     }
-
-    return router.push("/");
+    return <WrappedComponent />;
   };
 };
 

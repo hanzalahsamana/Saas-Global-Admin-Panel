@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currUser: null,
+  currentUser: null,
   loading: true,
 };
 
@@ -11,12 +11,14 @@ export const currentDataSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
-      state.currUser = action.payload;
+      state.currentUser = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload))
+      state.loading = false
       return state;
     },
     setLogout: (state) => {
-      state.currUser = null;
-      localStorage.removeItem("userToken");
+      state.currentUser = null;
+      localStorage.clear();
       state.loading = false;
       return state;
     },
