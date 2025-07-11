@@ -7,11 +7,10 @@ body {
 }
 
 :root {
-  --primaryC: #0078D4;
-  --primaryHover: #1294f8;
-  --secondaryC: rgb(235, 245, 253);
+  --primaryC: #15283B;
+  --secondaryC: #3e566e;
   --accentC: #ff5733;
-  --backgroundC: #ffffff;
+  --backgroundC: #F9FAFB;
   --textC: #333333e8;
   --borderC: #dadce0;
   --textTC: #5f6571bc;
@@ -131,4 +130,12 @@ body {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.stop-text-reflection {
+  will-change: transform;
 }

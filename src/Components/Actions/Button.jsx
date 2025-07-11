@@ -21,13 +21,13 @@ const Button = ({
     outline:
       "border-2 border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
     primary:
-      "bg-(--primaryC) hover:bg-(--primaryHover) text-(--backgroundC) shadow-[inset_0_-3.2px_#02599b]",
+      "bg-(--primaryC) text-(--backgroundC) shadow-[inset_0_-3.2px_#3e566e]",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",
     white:
       "bg-(--backgroundC) border text-(--textC) border-(--borderC) shadow-[inset_0_-3px_#d7d7da]",
     warning: "bg-[#FA9A1F] text-white shadow-[inset_0_-3.2px_#b45309]",
-    text: "bg-transparent text-(--primaryC) py-0 !px-[5px]",
+    text: "bg-transparent text-(--primaryC) py-0 px-[5px]",
   };
   const buttonSizes = {
     large: "text-[16px] h-[42px] px-[10px] min-w-[150px] ",

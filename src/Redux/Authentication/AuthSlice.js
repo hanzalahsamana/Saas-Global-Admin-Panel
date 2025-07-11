@@ -16,10 +16,10 @@ export const currentDataSlice = createSlice({
       state.loading = false
       return state;
     },
-    setLogout: (state) => {
+    logoutUser: (state) => {
       state.currentUser = null;
-      localStorage.clear();
       state.loading = false;
+      localStorage.clear();
       return state;
     },
     setLoading: (state, action) => {
@@ -29,7 +29,7 @@ export const currentDataSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, setLogout, setLoading } =
+export const { setCurrentUser, logoutUser, setLoading } =
   currentDataSlice.actions;
 
 export default currentDataSlice.reducer;

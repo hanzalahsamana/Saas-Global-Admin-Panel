@@ -22,16 +22,16 @@ const Login = () => {
     dispatch(setCurrentUser(values));
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8 border border-gray-200">
+    <div className="min-h-screen flex items-center justify-center bg-(--secondaryC) px-4">
+      <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-md shadow-gray-400 ">
         <h1 className=" font-bold text-center mb-6">Login</h1>
 
         <FormikForm
           initialValues={initialValues}
           handleSubmit={handleSubmit}
           validationSchema={loginValidation}
-          buttonLabel="Hello"
-        >
+          buttonLabel="Login"
+        > 
           <FormInput
             name="email"
             type="email"
