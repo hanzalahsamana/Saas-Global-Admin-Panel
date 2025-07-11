@@ -2,32 +2,32 @@
 import { Fragment, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { FcOnlineSupport } from "react-icons/fc";
+import { FcAutomatic, FcBusinessContact, FcBusinessman, FcCustomerSupport, FcHeadset, FcMindMap, FcOnlineSupport, FcSalesPerformance, FcSupport, FcTreeStructure } from "react-icons/fc";
 import { FcManager } from "react-icons/fc";
 import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
 import { FcInvite } from "react-icons/fc";
 import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { FcShop } from "react-icons/fc";
-import { MdUnsubscribe } from "react-icons/md";
+import { MdSubscriptions, MdUnsubscribe } from "react-icons/md";
 import { FcServices } from "react-icons/fc";
 
 const sideBarTabs = [
   {
     label: "Dashboard",
-    icon: <RiDashboardHorizontalLine className="text-(--accentC)" />,
-    href: "/Admin/UserPdfs",
+    icon: <FcMindMap />,
+    href: "/",
   },
   {
     label: "Users",
-    icon: <FcManager />,
-    href: "/Admin/NewUsers",
+    icon: <FcBusinessman />,
+    href: "/users",
   },
   {
     label: "Subscriptions",
-    icon: <MdUnsubscribe className="text-(--accentC)" />,
-    href: "/Admin/WeeklyResults",
-  },
+    icon: <FcSalesPerformance />,
+    href: "/subscriptions",
+  }, 
   {
     label: "Email Broadcast",
     icon: <FcInvite />,
@@ -35,7 +35,7 @@ const sideBarTabs = [
   },
   {
     label: "Support Tickets",
-    icon: <FcOnlineSupport />,
+    icon: <FcCustomerSupport />,
     href: "/Admin/NationalAverage",
   },
   {
@@ -45,7 +45,7 @@ const sideBarTabs = [
   },
   {
     label: "Settings",
-    icon: <FcServices />,
+    icon: <FcAutomatic />,
     href: "/Admin/StandardExpanses",
   },
 ];
@@ -70,7 +70,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   return (
     <Fragment>
       <div
-        className={`bg-gradient-to-b from-(--primaryC) to-(--secondaryC) text-white overflow-hidden shadow-lg h-[calc(100vh-50px)]  lg:h-[100vh] absolute inset-y-0 top-[50px] lg:top-0 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
+        className={`bg-white text-black overflow-hidden shadow-xl shadow-gray-300 h-[calc(100vh-50px)]  lg:h-[100vh] absolute inset-y-0 top-[50px] lg:top-0 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
           isOpen ? "w-[230px]" : "w-[0px] lg:w-[60px]"
         }`}
       >
@@ -78,14 +78,14 @@ function Sidebar({ isOpen, setIsOpen }) {
           className={`w-[100%] h-[50px] mb-2 overflow-hidden max-h-[50px] items-end gap-x-2`}
         >
           <p
-            className={`w-[60px] h-[100%] object-contain text-white ${
+            className={`w-[60px] h-[100%] object-contain text-black ${
               !isOpen ? "lg:flex justify-center items-center hidden" : "hidden"
             }`}
           >
             MT
           </p>
           <p
-            className={`w-[60%] h-[100%] pl-4 object-contain mb-3 text-white whitespace-nowrap ${
+            className={`w-[60%] h-[100%] pl-4 object-contain mb-3 text-black whitespace-nowrap ${
               isOpen ? "flex items-center" : "hidden"
             }`}
           >
@@ -102,7 +102,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                   //   data-tooltip-style="light"
                   //   data-tooltip-placement="right"
                   href={tab.href}
-                  className={`flex group h-[55px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-white hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${
+                  className={`flex group h-[55px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${
                     isOpen ? "hover:bg-secondaryC" : ""
                   } ${activeLink && isOpen ? "bg-secondaryC" : ""} ${
                     activeLink ? "text-primaryC" : ""

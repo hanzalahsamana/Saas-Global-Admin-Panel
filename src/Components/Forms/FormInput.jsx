@@ -40,7 +40,7 @@ const FormInput = ({
           disabled={disabled}
           autoComplete={autocomplete}
           placeholder={layout !== "floating" ? placeholder : ""}
-          className={`Inputs  placeholder:text-sm   placeholder:text-[#b9b9b9] shadow-[inset_0_0px_6px_0_rgb(0_0_0_/_0.02)] px-3 text-(--textTC) bg-(--backgroundC)  flex items-center border-[1.3px] w-full rounded-[4px] ${inputSizeClass} ${
+          className={`Inputs  placeholder:text-sm   placeholder:text-[#b9b9b9] shadow-[inset_0_0px_6px_0_rgb(0_0_0_/_0.02)] px-3 text-(--textTC)  flex items-center border-[1.3px] w-full rounded-[4px] bg-white ${inputSizeClass} ${
             error ? "border-red-500" : "border-gray-300 focus:border-[#297ed9]"
           } ${className} outline-none`}
         />
@@ -55,7 +55,7 @@ const FormInput = ({
         )}
         {layout === "floating" && (
           <label
-            className={`absolute left-3 px-1 bg-(--backgroundC) transition-all text-[#b9b9b9] ${
+            className={`absolute left-3 px-1 bg-white transition-all text-[#b9b9b9] ${
               isFilled || isFilled === 0
                 ? "top-[-10px] text-xs"
                 : `${

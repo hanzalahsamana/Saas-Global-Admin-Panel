@@ -7,10 +7,10 @@ body {
 }
 
 :root {
-  --primaryC: #15283B;
-  --secondaryC: #3e566e;
-  --accentC: #ff5733;
-  --backgroundC: #F9FAFB;
+  --primaryC: #322672;
+  --secondaryC: #ffffff;
+  --accentC: #54AF6B;
+  --backgroundC: #AD85BA; 
   --textC: #333333e8;
   --borderC: #dadce0;
   --textTC: #5f6571bc;
@@ -55,7 +55,7 @@ body {
   height: 20%;
   width: 20%;
   border-radius: 50%;
-  background-color: var(--primaryC);
+  background-color: var(--accentC);
   transform: scale(0);
   opacity: 0.5;
   animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;

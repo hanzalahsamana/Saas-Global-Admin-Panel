@@ -30,19 +30,19 @@ const Header = ({ toggleSidebar }) => {
     },
   ];
   return (
-    <header className=" h-[50px] sticky top-0 bg-(--secondaryC) z-20 w-full">
+    <header className=" h-[50px] sticky shadow-lg top-0 bg-(--primaryC) z-20 w-full">
       <div className="h-[100%] flex justify-between items-center w-full">
         {/* <div className="flex-row gap-x-6 flex items-center w-[20%]"> */}
         {/* toggle sidebar button  */}
         <Button
           variant="text"
-          className="h-[100%] w-full !bg-(--accentC) text-white !rounded-none"
+          className="h-[100%] w-full !text-xl text-white !rounded-none"
           action={toggleSidebar}
           label={<LuMenu />}
         />
         {/* </div> */}
 
-        <div className="relative bg-(--accentC) flex justify-center items-center h-full w-max px-4">
+        <div className="relative flex justify-center items-center h-full w-max px-4">
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="h-full gap-x-2 flex items-center cursor-pointer select-none focus:outline-none text-white font-semibold text-lg"

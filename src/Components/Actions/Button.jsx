@@ -21,7 +21,7 @@ const Button = ({
     outline:
       "border-2 border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
     primary:
-      "bg-(--primaryC) text-(--backgroundC) shadow-[inset_0_-3.2px_#3e566e]",
+      "bg-(--primaryC) text-(--secondaryC) shadow-[inset_0_-3.2px_#3e566e]",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",
     white:
