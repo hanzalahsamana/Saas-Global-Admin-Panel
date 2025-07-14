@@ -1,16 +1,18 @@
 "use client";
 import { Fragment, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
-import { FcAutomatic, FcBusinessContact, FcBusinessman, FcCustomerSupport, FcHeadset, FcMindMap, FcOnlineSupport, FcSalesPerformance, FcSupport, FcTreeStructure } from "react-icons/fc";
-import { FcManager } from "react-icons/fc";
+import {
+  FcAutomatic,
+  FcBusinessman,
+  FcCustomerSupport,
+  FcMindMap,
+  FcSalesPerformance,
+} from "react-icons/fc";
 import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
 import { FcInvite } from "react-icons/fc";
-import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { FcShop } from "react-icons/fc";
-import { MdSubscriptions, MdUnsubscribe } from "react-icons/md";
-import { FcServices } from "react-icons/fc";
 
 const sideBarTabs = [
   {
@@ -24,24 +26,24 @@ const sideBarTabs = [
     href: "/users",
   },
   {
+    label: "Stores",
+    icon: <FcShop />,
+    href: "/stores",
+  },
+  {
     label: "Subscriptions",
     icon: <FcSalesPerformance />,
     href: "/subscriptions",
-  }, 
+  },
   {
     label: "Email Broadcast",
     icon: <FcInvite />,
-    href: "/Admin/feedback",
+    href: "/email-broadcast",
   },
   {
-    label: "Support Tickets",
+    label: "Support",
     icon: <FcCustomerSupport />,
     href: "/Admin/NationalAverage",
-  },
-  {
-    label: "Stores",
-    icon: <FcShop />,
-    href: "/statements",
   },
   {
     label: "Settings",
@@ -75,7 +77,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         }`}
       >
         <div
-          className={`w-[100%] h-[50px] mb-2 overflow-hidden max-h-[50px] items-end gap-x-2`}
+          className={`w-[100%] h-[50px] overflow-hidden max-h-[50px] items-end gap-x-2`}
         >
           <p
             className={`w-[60px] h-[100%] object-contain text-black ${
@@ -102,11 +104,9 @@ function Sidebar({ isOpen, setIsOpen }) {
                   //   data-tooltip-style="light"
                   //   data-tooltip-placement="right"
                   href={tab.href}
-                  className={`flex group h-[55px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${
-                    isOpen ? "hover:bg-secondaryC" : ""
-                  } ${activeLink && isOpen ? "bg-secondaryC" : ""} ${
-                    activeLink ? "text-primaryC" : ""
-                  }`}
+                  className={`flex group mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${"hover:!bg-(--primaryC) hover:text-(--secondaryC)"} ${
+                    activeLink ? "!bg-(--primaryC) !text-(--secondaryC)" : ""
+                  } `}
                 >
                   <div
                     className={`text-2xl ${

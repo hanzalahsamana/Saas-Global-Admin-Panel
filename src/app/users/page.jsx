@@ -50,7 +50,7 @@ const Users = () => {
       onClick: (user) => router.push(`/users/${user._id}`),
     },
     {
-      label: "Suspend",
+      label: "Suspended",
       onClick: (user) => console.log("Suspend:", user),
     },
   ];
@@ -82,7 +82,7 @@ const Users = () => {
         data={users}
         actions={actions}
         renderers={{
-          status: statusRenderer, // 🔥 apply badge logic only to `status`
+          status: statusRenderer, 
         }}
       />
     </div>

@@ -134,7 +134,6 @@ function Home() {
             <FcBarChart size={25} />
             <p className=" font-semibold text-lg leading-tight"> Monthly Signups</p>
           </div>
-          {/* <h2 className="text-lg font-semibold mb-4">Monthly Signups</h2> */}
           <Chart
             options={signupChart.options}
             series={signupChart.series}
@@ -149,7 +148,6 @@ function Home() {
             <FcParallelTasks size={25} />
             <p className=" font-semibold text-lg leading-tight"> Plan Distribution</p>
           </div>
-          {/* <h2 className="text-lg font-semibold mb-4">🧑‍💼 Plan Distribution</h2> */}
           <Chart
             options={planDistribution.options}
             series={planDistribution.series}

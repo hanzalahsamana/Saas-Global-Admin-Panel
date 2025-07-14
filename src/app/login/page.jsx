@@ -5,19 +5,15 @@ import FormInput from "@/Components/Forms/FormInput";
 import { setCurrentUser } from "@/Redux/Authentication/AuthSlice";
 import { loginValidation } from "@/Utils/Validations/loginFormValidate";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const { currentUser } = useSelector((state) => state.currentUser);
-  console.log("currentUser", currentUser);
   const initialValues = {
     email: "hello@gmail.com",
     password: "123456",
   };
   const dispatch = useDispatch();
   const handleSubmit = async (values) => {
-    console.log("login form values", values);
-
     dispatch(setCurrentUser(values));
   };
   return (

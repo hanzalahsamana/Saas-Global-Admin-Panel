@@ -169,7 +169,7 @@ const UserDetails = () => {
             columns={storeColumns}
             data={storeData}
             renderers={{
-              status: statusRenderer, // 🔥 apply badge logic only to `status`
+              status: statusRenderer,
             }}
           />
         ) : (

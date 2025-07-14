@@ -38,15 +38,17 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
               })}
               {actions.length > 0 && (
                 <td className="px-4 py-3 flex gap-2 whitespace-nowrap">
-                  {actions.map((action, aIdx) => (
-                    <Button
-                      key={aIdx}
-                      action={() => action.onClick(row)}
-                      variant="text"
-                      className="!p-0"
-                      label={action.label}
-                    />
-                  ))}
+                  {actions.map((action, aIdx) => {
+                    return (
+                      <Button
+                        key={aIdx}
+                        action={() => action.onClick(row)}
+                        variant="outline"
+                        className="!text-xs !py-2 !rounded-sm"
+                        label={action.label}
+                      />
+                    );
+                  })}
                 </td>
               )}
             </tr>

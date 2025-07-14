@@ -19,7 +19,7 @@ const Button = ({
   // Define button styles based on variant
   const buttonStyles = {
     outline:
-      "border-2 border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
+      "border border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
     primary:
       "bg-(--primaryC) text-(--secondaryC) shadow-[inset_0_-3.2px_#3e566e]",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
@@ -39,7 +39,7 @@ const Button = ({
       onClick={action}
       disabled={loading || !active}
       type={type}
-      className={`group w-full cursor-pointer  inline-flex items-center justify-center rounded-[4px] transition-all duration-300 ease-in-out
+      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded-[4px] transition-all duration-300 ease-in-out
     ${buttonSizes[size]}
     ${
       loading || !active
