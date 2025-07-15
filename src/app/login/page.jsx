@@ -30,14 +30,12 @@ const Login = () => {
           <FormInput
             name="email"
             type="email"
-            className="!mt-8"
             size="large"
             placeholder="Email"
           />
           <FormInput
             name="password"
             type="password"
-            className="!mt-8"
             size="large"
             placeholder="Password"
           />

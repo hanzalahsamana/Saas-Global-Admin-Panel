@@ -107,12 +107,9 @@ const UserDetails = () => {
       {/* Header */}
       <div className="rounded-xl bg-(--primaryC) p-6 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <div className="flex gap-x-2 items-center mb-2">
-            <FcBusinessman size={35} />
-            <h1 className="text-2xl font-bold text-(--secondaryC)">
-              User Detail
-            </h1>
-          </div>
+          <h1 className="text-2xl font-bold text-(--secondaryC)">
+            User Detail
+          </h1>
           <p className="text-sm text-(--secondaryC)">
             Comprehensive user information
           </p>
@@ -158,12 +155,9 @@ const UserDetails = () => {
 
       {/* Store Table */}
       <div className="bg-white rounded-xl shadow border border-gray-100 p-6">
-        <div className="flex items-center gap-x-2  mb-4">
-          <FcShop size={25} />
-          <h2 className="text-lg font-semibold text-gray-800">
-            User's Stores ({user.stores.length})
-          </h2>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          User's Stores ({user.stores.length})
+        </h2>
         {storeData.length > 0 ? (
           <Table
             columns={storeColumns}

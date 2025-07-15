@@ -104,8 +104,8 @@ function Sidebar({ isOpen, setIsOpen }) {
                   //   data-tooltip-style="light"
                   //   data-tooltip-placement="right"
                   href={tab.href}
-                  className={`flex group mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${"hover:!bg-(--primaryC) hover:text-(--secondaryC)"} ${
-                    activeLink ? "!bg-(--primaryC) !text-(--secondaryC)" : ""
+                  className={`flex group mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${"hover:!bg-(--backgroundC)"} ${
+                    activeLink ? "!bg-(--backgroundC)" : ""
                   } `}
                 >
                   <div

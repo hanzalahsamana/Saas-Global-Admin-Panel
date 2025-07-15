@@ -78,9 +78,7 @@ const Subscriptions = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="font-semibold flex items-end gap-x-2">
-        <FcSalesPerformance size={30} /> Subscriptions
-      </h1>
+      <h1 className="font-semibold">Subscriptions</h1>
 
       <Table
         columns={columns}

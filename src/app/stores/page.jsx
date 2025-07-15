@@ -1,8 +1,10 @@
 "use client";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
+import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import Table from "@/Components/Tables/Table";
-import React from "react";
-import { FcShop } from "react-icons/fc";
+import React, { useState } from "react";
+
+const columns = ["name", "domain", "ownerEmail", "status", "createdAt", "plan"];
 
 const stores = [
   {
@@ -26,14 +28,8 @@ const stores = [
 ];
 
 const Stores = () => {
-  const columns = [
-    "name",
-    "domain",
-    "ownerEmail",
-    "status",
-    "createdAt",
-    "plan",
-  ];
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedStore, setSelectedStore] = useState({});
 
   const actions = (store) => [
     {
@@ -43,8 +39,10 @@ const Stores = () => {
     },
     {
       label: store.status === "Suspended" ? "Active" : "Suspend",
-      onClick: (row) =>
-        console.log("Toggle suspend/activate store:", row.status),
+      onClick: (row) => {
+        setModalShow(true);
+        setSelectedStore(row);
+      },
     },
   ];
 
@@ -66,15 +64,22 @@ const Stores = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-xl font-semibold flex items-center gap-2">
-        <FcShop size={30} /> Stores
-      </h1>
+      <h1 className="font-semibold">Stores</h1>
 
       <Table
         columns={columns}
         data={stores}
         actions={actions}
         renderers={renderers}
+      />
+      <ConfirmationModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        content={`You want to ${
+          selectedStore?.status === "Active" ? "Suspend" : "Active"
+        } this store`}
+        heading={"Confirm Please"}
+        contentHeading="Are you sure?"
       />
     </div>
   );

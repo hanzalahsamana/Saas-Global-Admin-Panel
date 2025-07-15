@@ -27,7 +27,7 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
                 key={rowIdx}
                 className={`${
                   rowIdx !== data.length - 1 && "border-b border-(--borderC)"
-                }  cursor-pointer transition-all duration-500`}
+                }  cursor-pointer transition-all duration-500 hover:bg-(--backgroundC)`}
               >
                 {columns.map((col, colIdx) => {
                   const value = row[col];
