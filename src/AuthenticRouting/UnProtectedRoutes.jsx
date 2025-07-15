@@ -9,17 +9,17 @@ const UnProtectedRoute = (WrappedComponent) => {
     const router = useRouter();
 
     useEffect(() => {
-      if (currentUser?.email) {
+      if (currentUser?.email && !loading) {
         router.push("/");
         return;
       }
     }, [currentUser?.email]);
 
-    if (loading) {
+    if ((currentUser?.email || currentUser) && !loading) {
       return <Loader />;
     }
 
-    if (currentUser) {
+    if (loading) {
       return <Loader />;
     }
 

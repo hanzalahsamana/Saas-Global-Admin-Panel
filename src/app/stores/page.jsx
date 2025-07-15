@@ -35,15 +35,16 @@ const Stores = () => {
     "plan",
   ];
 
-  const actions = [
+  const actions = (store) => [
     {
-      label: "View Store",
+      label: "View",
       onClick: (row) =>
         console.log("Redirect to dashboard for store:", row.slug),
     },
     {
-      label: "Toggle Status",
-      onClick: (row) => console.log("Toggle suspend/activate store:", row.slug),
+      label: store.status === "Suspended" ? "Active" : "Suspend",
+      onClick: (row) =>
+        console.log("Toggle suspend/activate store:", row.status),
     },
   ];
 

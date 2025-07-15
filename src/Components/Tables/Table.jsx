@@ -1,4 +1,3 @@
-// components/Table.jsx
 "use client";
 import React from "react";
 import Button from "../Actions/Button";
@@ -20,39 +19,43 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIdx) => (
-            <tr
-              key={rowIdx}
-              className={`${
-                rowIdx !== data.length - 1 && "border-b border-(--borderC)"
-              }  cursor-pointer transition-all duration-500`}
-            >
-              {columns.map((col, colIdx) => {
-                const value = row[col];
-                const Renderer = renderers[col];
-                return (
-                  <td key={colIdx} className="px-4 py-3 whitespace-nowrap">
-                    {Renderer ? <Renderer value={value} row={row} /> : value}
+          {data.map((row, rowIdx) => {
+            const rowActions =
+              typeof actions === "function" ? actions(row) : actions;
+            return (
+              <tr
+                key={rowIdx}
+                className={`${
+                  rowIdx !== data.length - 1 && "border-b border-(--borderC)"
+                }  cursor-pointer transition-all duration-500`}
+              >
+                {columns.map((col, colIdx) => {
+                  const value = row[col];
+                  const Renderer = renderers[col];
+                  return (
+                    <td key={colIdx} className="px-4 py-3 whitespace-nowrap">
+                      {Renderer ? <Renderer value={value} row={row} /> : value}
+                    </td>
+                  );
+                })}
+                {actions.length > 0 && (
+                  <td className="px-4 py-3 flex gap-2 whitespace-nowrap">
+                    {rowActions.map((action, aIdx) => {
+                      return (
+                        <Button
+                          key={aIdx}
+                          action={() => action.onClick(row)}
+                          variant="outline"
+                          className="!text-xs !py-2 !rounded-sm"
+                          label={action.label}
+                        />
+                      );
+                    })}
                   </td>
-                );
-              })}
-              {actions.length > 0 && (
-                <td className="px-4 py-3 flex gap-2 whitespace-nowrap">
-                  {actions.map((action, aIdx) => {
-                    return (
-                      <Button
-                        key={aIdx}
-                        action={() => action.onClick(row)}
-                        variant="outline"
-                        className="!text-xs !py-2 !rounded-sm"
-                        label={action.label}
-                      />
-                    );
-                  })}
-                </td>
-              )}
-            </tr>
-          ))}
+                )}
+              </tr>
+            );
+          })}
           {data.length === 0 && (
             <tr>
               <td

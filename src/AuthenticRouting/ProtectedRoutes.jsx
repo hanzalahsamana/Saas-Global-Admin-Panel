@@ -10,18 +10,19 @@ export default function ProtectedRoute(WrappedComponent) {
   return () => {
     const router = useRouter();
     const { currentUser, loading } = useSelector((state) => state.currentUser);
+
     useEffect(() => {
-      if (!currentUser?.email) {
+      if (!currentUser?.email && !loading) {
         router.push("/login");
         return;
       }
     }, [currentUser?.email]);
 
-    if (loading) {
+    if ((!currentUser?.email || !currentUser) && !loading) {
       return <Loader />;
     }
 
-    if (!currentUser) {
+    if (loading) {
       return <Loader />;
     }
 

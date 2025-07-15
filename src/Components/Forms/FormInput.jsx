@@ -24,9 +24,9 @@ const FormInput = ({
   const error = meta.touched && meta.error;
 
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full mb-6">
       {layout === "label" && (
-        <label className="text-[14px] font-medium text-(--textC) mb-1 block">
+        <label className="text-[14px] font-medium text-(--textTC) mb-1 block">
           {label}
           {required && <span className="text-red-500"> *</span>}
         </label>
@@ -40,8 +40,8 @@ const FormInput = ({
           disabled={disabled}
           autoComplete={autocomplete}
           placeholder={layout !== "floating" ? placeholder : ""}
-          className={`Inputs  placeholder:text-sm   placeholder:text-[#b9b9b9] shadow-[inset_0_0px_6px_0_rgb(0_0_0_/_0.02)] px-3 text-(--textTC)  flex items-center border-[1.3px] w-full rounded-[4px] bg-white ${inputSizeClass} ${
-            error ? "border-red-500" : "border-gray-300 focus:border-[#297ed9]"
+          className={`Inputs  placeholder:text-sm   placeholder:text-[#b9b9b9] shadow-[inset_0_0px_6px_0_rgb(0_0_0_/_0.02)] px-3 text-(--textC)  flex items-center border-[1.3px] w-full rounded-[4px] bg-white ${inputSizeClass} ${
+            error ? "border-red-500" : "border-gray-300 focus:border-(--accentC)"
           } ${className} outline-none`}
         />
         {actionIcon && (
@@ -55,7 +55,7 @@ const FormInput = ({
         )}
         {layout === "floating" && (
           <label
-            className={`absolute left-3 px-1 bg-white transition-all text-[#b9b9b9] ${
+            className={`absolute left-3 px-1 bg-white transition-all text-(--textTc) ${
               isFilled || isFilled === 0
                 ? "top-[-10px] text-xs"
                 : `${

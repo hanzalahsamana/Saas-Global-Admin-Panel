@@ -44,16 +44,21 @@ const Users = () => {
     },
   ];
 
-  const actions = [
+  const actions = (user) => [
     {
       label: "View",
-      onClick: (user) => router.push(`/users/${user._id}`),
+      onClick: () => router.push(`/users/${user._id}`),
     },
     {
-      label: "Suspended",
-      onClick: (user) => console.log("Suspend:", user),
+      label: user.status === "Suspended" ? "Active" : "Suspend",
+      onClick: () =>
+        console.log(
+          `${user.status === "Suspended" ? "Active" : "Suspend"}:`,
+          user
+        ),
     },
   ];
+
   const statusRenderer = ({ value }) => {
     const statusColors = {
       Active: "bg-green-100 text-green-700",
@@ -82,7 +87,7 @@ const Users = () => {
         data={users}
         actions={actions}
         renderers={{
-          status: statusRenderer, 
+          status: statusRenderer,
         }}
       />
     </div>

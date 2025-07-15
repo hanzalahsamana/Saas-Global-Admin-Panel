@@ -1,5 +1,5 @@
 "use client";
-import { setCurrentUser } from "@/Redux/Authentication/AuthSlice";
+import { setCurrentUser, setLoading } from "@/Redux/Authentication/AuthSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -11,8 +11,12 @@ const ReduxProviderWrap = ({ children }) => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    dispatch(setCurrentUser(user));
-  }, []);
+    if (user?.email) {
+      dispatch(setCurrentUser(user));
+    } else {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch]);
 
   return children;
 };
