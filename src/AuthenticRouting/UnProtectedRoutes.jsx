@@ -16,11 +16,11 @@ const UnProtectedRoute = (WrappedComponent) => {
     }, [currentUser?.email]);
 
     if ((currentUser?.email || currentUser) && !loading) {
-      return <Loader />;
+      return <Loader height="h-[100vh]" />;
     }
 
     if (loading) {
-      return <Loader />;
+      return <Loader height="h-[100vh]" />;
     }
 
     return <WrappedComponent />;

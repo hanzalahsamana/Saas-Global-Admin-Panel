@@ -6,7 +6,7 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
   return (
     <div className="w-full overflow-auto rounded-xl border border-(--borderC) bg-white">
       <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-(--primaryC) border border-(--primaryC) text-xs font-semibold uppercase text-(--secondaryC)">
+        <thead className="bg-(--primaryC) text-xs font-semibold uppercase text-(--secondaryC)">
           <tr>
             {columns.map((col, idx) => (
               <th key={idx} className="px-4 py-3 whitespace-nowrap">

@@ -17,12 +17,13 @@ const FormInput = ({
   layout = "floating", // "floating" or "label"
   label = "Name",
   autocomplete = "off", // "on" or "off"
+  handleChange,
 }) => {
   const [field, meta] = useField(name);
   const inputSizeClass = size === "small" ? "text-sm h-9" : "text-base h-11";
   const isFilled = field.value !== "" && field.value !== undefined;
   const error = meta.touched && meta.error;
-
+  // console.log("handleChange", handleChange);
   return (
     <div className="relative w-full mb-6">
       {layout === "label" && (
@@ -39,9 +40,15 @@ const FormInput = ({
           readOnly={readOnly}
           disabled={disabled}
           autoComplete={autocomplete}
+          onChange={(e) => {
+            field && field.onChange(e);
+            handleChange && handleChange(e);
+          }}
           placeholder={layout !== "floating" ? placeholder : ""}
           className={`Inputs  placeholder:text-sm   placeholder:text-[#b9b9b9] shadow-[inset_0_0px_6px_0_rgb(0_0_0_/_0.02)] px-3 text-(--textC)  flex items-center border-[1.3px] w-full rounded-[4px] bg-white ${inputSizeClass} ${
-            error ? "border-red-500" : "border-gray-300 focus:border-(--accentC)"
+            error
+              ? "border-red-500"
+              : "border-gray-300 focus:border-(--accentC)"
           } ${className} outline-none`}
         />
         {actionIcon && (

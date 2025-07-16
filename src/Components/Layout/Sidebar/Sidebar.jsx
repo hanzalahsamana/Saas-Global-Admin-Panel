@@ -4,7 +4,9 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import {
   FcAutomatic,
+  FcBearish,
   FcBusinessman,
+  FcComboChart,
   FcCustomerSupport,
   FcMindMap,
   FcSalesPerformance,
@@ -41,14 +43,19 @@ const sideBarTabs = [
     href: "/email-broadcast",
   },
   {
+    label: "Analytics",
+    icon: <FcComboChart />,
+    href: "/subscriptions",
+  },
+  {
     label: "Support",
     icon: <FcCustomerSupport />,
-    href: "/Admin/NationalAverage",
+    href: "/subscriptions",
   },
   {
     label: "Settings",
     icon: <FcAutomatic />,
-    href: "/Admin/StandardExpanses",
+    href: "/subscriptions",
   },
 ];
 
