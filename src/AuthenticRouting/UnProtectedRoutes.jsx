@@ -5,21 +5,23 @@ import { useSelector } from "react-redux";
 
 const UnProtectedRoute = (WrappedComponent) => {
   return () => {
-    const { currentUser, loading } = useSelector((state) => state.currentUser);
+    const { currentUser, userLoading } = useSelector(
+      (state) => state.currentUser
+    );
     const router = useRouter();
 
     useEffect(() => {
-      if (currentUser?.email && !loading) {
+      if (currentUser?.email && !userLoading) {
         router.push("/");
         return;
       }
     }, [currentUser?.email]);
 
-    if ((currentUser?.email || currentUser) && !loading) {
+    if ((currentUser?.email || currentUser) && !userLoading) {
       return <Loader height="h-[100vh]" />;
     }
 
-    if (loading) {
+    if (userLoading) {
       return <Loader height="h-[100vh]" />;
     }
 

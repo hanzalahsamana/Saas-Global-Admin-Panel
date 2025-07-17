@@ -9,20 +9,23 @@ import { useSelector } from "react-redux";
 export default function ProtectedRoute(WrappedComponent) {
   return () => {
     const router = useRouter();
-    const { currentUser, loading } = useSelector((state) => state.currentUser);
+    const { currentUser, userLoading } = useSelector(
+      (state) => state.currentUser
+    );
 
     useEffect(() => {
-      if (!currentUser?.email && !loading) {
+      console.log("Entring in useEffect...");
+      if (!currentUser?.email) {
         router.push("/login");
         return;
       }
     }, [currentUser?.email]);
 
-    if ((!currentUser?.email || !currentUser) && !loading) {
+    if ((!currentUser?.email || !currentUser) && !userLoading) {
       return <Loader height="h-[100vh]" />;
     }
 
-    if (loading) {
+    if (userLoading) {
       return <Loader height="h-[100vh]" />;
     }
 

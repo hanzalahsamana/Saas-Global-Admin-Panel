@@ -6,7 +6,6 @@ import Sidebar from "./Sidebar/Sidebar";
 import Header from "./Header/Header";
 
 export default function DashbordLayout({ children }) {
-  const { currentUser } = useSelector((state) => state.currentUser);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {

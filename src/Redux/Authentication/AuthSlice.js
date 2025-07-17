@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: null,
-  loading: true,
+  userLoading: true,
 };
 
 export const currentDataSlice = createSlice({
@@ -13,17 +13,17 @@ export const currentDataSlice = createSlice({
     setCurrentUser: (state, action) => {
       state.currentUser = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload))
-      state.loading = false
+      state.userLoading = false
       return state;
     },
     logoutUser: (state) => {
       state.currentUser = null;
-      state.loading = false;
+      state.userLoading = false;
       localStorage.clear();
       return state;
     },
     setLoading: (state, action) => {
-      state.loading = action.payload;
+      state.userLoading = action.payload;
       return state;
     },
   },
