@@ -13,9 +13,7 @@ const ReduxProviderWrap = ({ children }) => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("user", user);
     if (!user) {
-      console.log("Entring....");
       dispatch(setLoading(false));
     } else {
       dispatch(setCurrentUser(user));

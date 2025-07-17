@@ -14,12 +14,11 @@ export default function ProtectedRoute(WrappedComponent) {
     );
 
     useEffect(() => {
-      console.log("Entring in useEffect...");
-      if (!currentUser?.email) {
+      if (!currentUser?.email && !userLoading) {
         router.push("/login");
         return;
       }
-    }, [currentUser?.email]);
+    }, [currentUser?.email, userLoading]);
 
     if ((!currentUser?.email || !currentUser) && !userLoading) {
       return <Loader height="h-[100vh]" />;

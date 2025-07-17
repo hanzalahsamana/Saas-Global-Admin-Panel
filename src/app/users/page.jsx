@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import { CustomDropdown } from "@/Components/Actions/DropDown";
-import { DatePicker } from "@/Components/Actions/DatePicker";
+import { Datepicker } from "@/Components/Actions/DatePicker";
 
 const columns = ["name", "email", "plan", "status", "createdAt", "totalStores"];
 
@@ -105,7 +105,7 @@ const Users = () => {
             loading={false}
             isActive={!selectedFilter}
           />
-          {selectedFilter === "Created At" && <DatePicker />}
+          {selectedFilter === "Created At" && <Datepicker />}
         </div>
       </div>
       <Table
