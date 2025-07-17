@@ -1,130 +1,78 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import { CgInsertAfter } from "react-icons/cg";
-import FormInput from "../Forms/FormInput";
-import { IoMdArrowDropup } from "react-icons/io";
+// import React, { useRef } from "react";
+import { IoChevronDown } from "react-icons/io5";
+import { CiFilter } from "react-icons/ci";
+import { useRef, useState } from "react";
+import useOutsideClick from "@/Utils/hooks/useOutSideClick";
 
-const DropDown = ({
-    defaultOptions = [],
-    selectedOption = "",
-    setSelectedOption,
-    placeholder = "Select",
-    required = true,
-    error = null,
-    className = '',
-    wantsCustomOption = false,
-    label = "label",
-    layout = null,
-}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [options, setOptions] = useState([]);
-    const dropdownRef = useRef(null);
-    const dropdownOptionsRef = useRef(null);
+export function CustomDropdown({
+  dropdownData,
+  dropdownHeading,
+  handleClick,
+  icon = true,
+}) {
+  const dropdownRef = useRef(null);
+  useOutsideClick(dropdownRef, () => setIsDropdownOpen(false));
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    // Normalize options: convert string array to object array
-    useEffect(() => {
-        const normalized = defaultOptions.map(opt =>
-            typeof opt === "string" ? { value: opt, label: opt } : opt
-        );
-        setOptions(normalized);
-    }, [defaultOptions]);
-
-    // Update searchTerm if selectedOption changes
-    useEffect(() => {
-        const selectedObj = options.find(opt => opt.value === selectedOption);
-        setSearchTerm(selectedObj?.label || "");
-    }, [selectedOption, options]);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-
-    // Reset scroll on search term change
-    useEffect(() => {
-        if (dropdownOptionsRef.current) {
-            dropdownOptionsRef.current.scrollTop = 0;
-        }
-    }, [searchTerm]);
-
-    const handleSelect = (option) => {
-        setIsOpen(false);
-        setSelectedOption(option.value);
-        setSearchTerm(option.label);
-    };
-
-    const handleCustomOptionSelect = () => {
-        const trimmed = searchTerm.trim();
-        if (trimmed && !options.find(opt => opt.label === trimmed)) {
-            const newOption = { value: trimmed, label: trimmed };
-            setOptions([newOption, ...options]);
-            setSelectedOption(trimmed);
-            setSearchTerm(trimmed);
-        }
-    };
-
-    const showCreateOption =
-        wantsCustomOption && searchTerm?.trim() && !options.find(opt => opt.label === searchTerm.trim());
-
-    return (
-        <div className={`w-full flex flex-col ${className}`}>
-            <div ref={dropdownRef} className="relative flex flex-col w-full gap-2">
-                <div>
-                    <FormInput
-                        onFocus={() => setIsOpen(true)}
-                        error={error}
-                        value={searchTerm}
-                        readOnly={!wantsCustomOption}
-                        handleChange={(e) => {
-                            setSearchTerm(e.target.value);
-                            setIsOpen(true);
-                        }}
-                        placeholder={placeholder}
-                        className={className}
-                        label={label}
-                        layout={layout}
-                        actionIcon={
-                            <span className={`ml-auto absolute right-0 text-(--textTC) text-[20px] transition-all ${isOpen ? "rotate-0" : "rotate-180"}`}>
-                                <IoMdArrowDropup />
-                            </span>
-                        }
-                    />
-                </div>
-
-                {/* Dropdown options */}
-                <div
-                    ref={dropdownOptionsRef}
-                    className={`absolute top-[100%] mt-[4px] w-full bg-(--backgroundC) box-content border rounded-md shadow-md z-50 transition-all duration-150 ease-in-out overflow-y-auto customScroll ${isOpen ? "max-h-[150px] border" : "max-h-0 border-none"}`}
-                >
-                    {showCreateOption && (
-                        <div
-                            className="px-3 py-2 text-sm text-blue-600 cursor-pointer hover:bg-blue-50 flex items-center gap-2"
-                            onClick={handleCustomOptionSelect}
-                        >
-                            <CgInsertAfter />
-                            Add "<span className="font-medium">{searchTerm}</span>"
-                        </div>
-                    )}
-
-                    {options.map((option, index) => (
-                        <div
-                            key={index}
-                            className={`px-3 py-2 text-sm cursor-pointer ${selectedOption === option.value ? 'bg-[#e2e2e4] text-gray-700' : 'hover:bg-gray-100'}`}
-                            onClick={() => handleSelect(option)}
-                        >
-                            {option.label}
-                        </div>
-                    ))}
-                </div>
-            </div>
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+  return (
+    <div ref={dropdownRef} className="min-w-full md:min-w-[200px] select-none">
+      <div className="relative">
+        <div
+          onClick={() => toggleDropdown()}
+          className="bg-white cursor-pointer h-[36px] px-4 w-[100%] border border-(--borderC) flex items-center gap-x-1 justify-between"
+        >
+          <div className="flex items-center gap-x-1">
+            {icon && (
+              <div className="text-darkTextC text-lg">
+                <CiFilter size={18} />
+              </div>
+            )}
+            <p className="text-darkTextC whitespace-nowrap capitalize">
+              {dropdownHeading}
+            </p>
+          </div>
+          <div
+            className={`text-darkTextC text-lg ${
+              !isDropdownOpen ? "rotate-0" : "rotate-[-180deg]"
+            } transition-all duration-200 ease-out`}
+          >
+            <IoChevronDown />
+          </div>
         </div>
-    );
-};
-
-export default DropDown;
+        {isDropdownOpen && (
+          <div className="absolute top-9 w-[100%] z-10 max-h-[150px] overflow-auto custom-scrollbar rouded-br-sm bg-white shadow-sm border-b border-r border-l border-(--borderC)">
+            {dropdownData.length > 0 &&
+              dropdownData.map((item, index) => {
+                const itemValue = item?.name || item;
+                if (itemValue === dropdownHeading) return null;
+                return (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      handleClick(itemValue);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`flex item-center hover:bg-[#F9FAFB] cursor-pointer gap-x-1 px-4 py-2 `}
+                  >
+                    {item?.icon && (
+                      <div
+                        className={`text-lg w-[20px] h-[20px] flex items-center text-darkTextC`}
+                      >
+                        {item?.icon}
+                      </div>
+                    )}
+                    <p className="leading-5 text-md capitalize text-darkTextC">
+                      {itemValue}
+                    </p>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

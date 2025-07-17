@@ -14,20 +14,16 @@ export default function DashbordLayout({ children }) {
   };
 
   return (
-    <section className="custom-font-family">
-      <div className="flex h-[calc(100vh-50px)]">
+    <section className="custom-font-family w-full">
+      <Header toggleSidebar={toggleSidebar} />
+      <div className="flex justify-between h-[calc(100vh-50px)] w-full">
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-        <div className="w-full flex justify-end">
-          <div
-            className={`${
-              isSidebarOpen
-                ? "lg:w-[calc(100%-230px)]"
-                : "lg:w-[calc(100%-60px)]"
-            } w-full max-h-[100%] overflow-auto no-scrollbar min-h-[100vh] transition-all duration-100 ease-out`}
-          >
-            <Header toggleSidebar={toggleSidebar} />
-            {children}
-          </div>
+        <div
+          className={`${
+            isSidebarOpen ? "lg:w-[calc(100%-230px)]" : "lg:w-[calc(100%-65px)]"
+          } w-full max-h-[100%] overflow-auto no-scrollbar min-h-[100%] transition-all duration-100 ease-out`}
+        >
+          {children}
         </div>
       </div>
     </section>

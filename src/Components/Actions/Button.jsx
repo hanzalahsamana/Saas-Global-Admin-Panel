@@ -19,13 +19,11 @@ const Button = ({
   // Define button styles based on variant
   const buttonStyles = {
     outline:
-      "border-2 border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
-    primary:
-      "bg-(--primaryC) text-(--backgroundC) shadow-[inset_0_-3.2px_#3e566e]",
+      "border !border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
+    primary: "bg-primaryC text-secondaryC",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",
-    white:
-      "bg-(--backgroundC) border text-(--textC) border-(--borderC) shadow-[inset_0_-3px_#d7d7da]",
+    white: "bg-(--secondaryC) border text-(--textC) !border-(--borderC)",
     warning: "bg-[#FA9A1F] text-white shadow-[inset_0_-3.2px_#b45309]",
     text: "bg-transparent text-(--primaryC) py-0 px-[5px]",
   };
@@ -39,7 +37,7 @@ const Button = ({
       onClick={action}
       disabled={loading || !active}
       type={type}
-      className={`group w-full cursor-pointer  inline-flex items-center justify-center rounded-[4px] transition-all duration-300 ease-in-out
+      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded-[4px] transition-all duration-300 ease-in-out
     ${buttonSizes[size]}
     ${
       loading || !active

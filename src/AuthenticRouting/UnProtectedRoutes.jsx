@@ -7,19 +7,20 @@ const UnProtectedRoute = (WrappedComponent) => {
   return () => {
     const { currentUser, loading } = useSelector((state) => state.currentUser);
     const router = useRouter();
+
     useEffect(() => {
-      if (currentUser) {
+      if (currentUser?.email && !loading) {
         router.push("/");
         return;
       }
-    }, [currentUser]);
+    }, [currentUser?.email]);
 
-    if (currentUser) {
-      return <Loader />;
+    if ((currentUser?.email || currentUser) && !loading) {
+      return <Loader height="h-[100vh]" />;
     }
 
     if (loading) {
-      return <Loader />;
+      return <Loader height="h-[100vh]" />;
     }
 
     return <WrappedComponent />;

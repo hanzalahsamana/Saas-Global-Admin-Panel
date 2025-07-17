@@ -3,12 +3,18 @@ import { useSelector } from "react-redux";
 import { CiHome } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
-import { LuMenu } from "react-icons/lu";
+import { LuLogOut, LuMenu } from "react-icons/lu";
 import Button from "@/Components/Actions/Button";
 import { GoChevronDown } from "react-icons/go";
 import { logoutUser } from "@/Redux/Authentication/AuthSlice";
 import { dispatch } from "@/Redux/Store";
 import { useRouter } from "next/navigation";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { IoIosSettings } from "react-icons/io";
+import { TfiMenu } from "react-icons/tfi";
+
+
+
 
 const Header = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -30,22 +36,31 @@ const Header = ({ toggleSidebar }) => {
     },
   ];
   return (
-    <header className=" h-[50px] sticky top-0 bg-(--secondaryC) z-20 w-full">
+    <header className=" h-[50px] sticky top-0 bg-secondaryC  border-b border-gray-200 shadow-sm z-20 w-full">
       <div className="h-[100%] flex justify-between items-center w-full">
         {/* <div className="flex-row gap-x-6 flex items-center w-[20%]"> */}
         {/* toggle sidebar button  */}
         <Button
           variant="text"
-          className="h-[100%] w-full !bg-(--accentC) text-white !rounded-none"
+          className="h-[100%] w-full !text-xl !rounded-none"
           action={toggleSidebar}
-          label={<LuMenu />}
+          label={<TfiMenu  />}
         />
         {/* </div> */}
+        <div className="flex text-primaryC items-center gap-x-6 pr-6">
+          <FaUser size={20} className="cursor-pointer" />
+          <IoIosSettings size={25} className="cursor-pointer" />
+          <FaSignOutAlt
+            size={20}
+            className="cursor-pointer"
+            onClick={() => dispatch(logoutUser())}
+          />
+        </div>
 
-        <div className="relative bg-(--accentC) flex justify-center items-center h-full w-max px-4">
+        {/* <div className="relative flex justify-center items-center h-full w-max px-4">
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="h-full gap-x-2 flex items-center cursor-pointer select-none focus:outline-none text-white font-semibold text-lg"
+            className="h-full gap-x-2 flex items-center cursor-pointer select-none focus:outline-none text-textC font-semibold text-lg"
           >
             <span className="leading-normal ">{currentUser?.email}</span>
             <div
@@ -56,7 +71,6 @@ const Header = ({ toggleSidebar }) => {
               <GoChevronDown />
             </div>
           </div>
-          {/* Dropdown Menu */}
           {dropdownOpen && (
             <div className="absolute top-10 right-4 mt-1 w-40 bg-[#ffffff] cursor-pointer text-darkTextC rounded-lg z-10 shadow-lg">
               {dropDownData.map((item, index) => {
@@ -83,7 +97,7 @@ const Header = ({ toggleSidebar }) => {
               })}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );

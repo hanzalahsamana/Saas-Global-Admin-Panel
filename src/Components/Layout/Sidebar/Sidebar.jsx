@@ -1,52 +1,70 @@
 "use client";
 import { Fragment, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
-import { FcOnlineSupport } from "react-icons/fc";
-import { FcManager } from "react-icons/fc";
+import {
+  FcAutomatic,
+  FcBearish,
+  FcBusinessman,
+  FcComboChart,
+  FcCustomerSupport,
+  FcMindMap,
+  FcSalesPerformance,
+} from "react-icons/fc";
 import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
 import { FcInvite } from "react-icons/fc";
-import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { FcShop } from "react-icons/fc";
-import { MdUnsubscribe } from "react-icons/md";
-import { FcServices } from "react-icons/fc";
+import { MdDashboard, MdSpaceDashboard } from "react-icons/md";
+import { FaStore, FaUser } from "react-icons/fa";
+import { BiSolidStore } from "react-icons/bi";
+import { PiContactlessPaymentFill } from "react-icons/pi";
+import { MdEmail } from "react-icons/md";
+import { IoAnalytics } from "react-icons/io5";
+import { SiGoogleanalytics } from "react-icons/si";
+import { BiSupport } from "react-icons/bi";
+import { IoMdSettings } from "react-icons/io";
 
 const sideBarTabs = [
   {
     label: "Dashboard",
-    icon: <RiDashboardHorizontalLine className="text-(--accentC)" />,
-    href: "/Admin/UserPdfs",
+    icon: <MdDashboard />,
+    href: "/",
   },
   {
     label: "Users",
-    icon: <FcManager />,
-    href: "/Admin/NewUsers",
-  },
-  {
-    label: "Subscriptions",
-    icon: <MdUnsubscribe className="text-(--accentC)" />,
-    href: "/Admin/WeeklyResults",
-  },
-  {
-    label: "Email Broadcast",
-    icon: <FcInvite />,
-    href: "/Admin/feedback",
-  },
-  {
-    label: "Support Tickets",
-    icon: <FcOnlineSupport />,
-    href: "/Admin/NationalAverage",
+    icon: <FaUser size={23} />,
+    href: "/users",
   },
   {
     label: "Stores",
-    icon: <FcShop />,
-    href: "/statements",
+    icon: <BiSolidStore />,
+    href: "/stores",
+  },
+  {
+    label: "Subscriptions",
+    icon: <PiContactlessPaymentFill />,
+    href: "/subscriptions",
+  },
+  {
+    label: "Email Broadcast",
+    icon: <MdEmail />,
+    href: "/email-broadcast",
+  },
+  {
+    label: "Analytics",
+    icon: <SiGoogleanalytics />,
+    href: "/subscriptions/",
+  },
+  {
+    label: "Support",
+    icon: <BiSupport />,
+    href: "/subscriptions/",
   },
   {
     label: "Settings",
-    icon: <FcServices />,
-    href: "/Admin/StandardExpanses",
+    icon: <IoMdSettings />,
+    href: "/subscriptions/",
   },
 ];
 
@@ -70,29 +88,31 @@ function Sidebar({ isOpen, setIsOpen }) {
   return (
     <Fragment>
       <div
-        className={`bg-gradient-to-b from-(--primaryC) to-(--secondaryC) text-white overflow-hidden shadow-lg h-[calc(100vh-50px)]  lg:h-[100vh] absolute inset-y-0 top-[50px] lg:top-0 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
-          isOpen ? "w-[230px]" : "w-[0px] lg:w-[60px]"
+        className={`absolute top-[50px] h-[calc(100vh-50px)] lg:relative lg:top-0 bg-primaryC text-black overflow-auto shadow-xl  shadow-gray-300 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
+          isOpen
+            ? "w-[230px] custom-scrollbar px-1"
+            : "w-[0px] lg:w-[65px] no-scrollbar lg:px-1"
         }`}
       >
         <div
-          className={`w-[100%] h-[50px] mb-2 overflow-hidden max-h-[50px] items-end gap-x-2`}
+          className={`w-[100%] h-[50px] overflow-hidden max-h-[50px] items-end gap-x-2`}
         >
           <p
-            className={`w-[60px] h-[100%] object-contain text-white ${
+            className={`w-[60px] h-[100%] object-contain text-secondaryC font-bold text-xl ${
               !isOpen ? "lg:flex justify-center items-center hidden" : "hidden"
             }`}
           >
             MT
           </p>
           <p
-            className={`w-[60%] h-[100%] pl-4 object-contain mb-3 text-white whitespace-nowrap ${
+            className={`w-[60%] h-[100%] pl-4 font-bold text-xl object-contain mb-3 text-secondaryC whitespace-nowrap ${
               isOpen ? "flex items-center" : "hidden"
             }`}
           >
             Multi Tenant
           </p>
         </div>
-        <nav className="(--primaryC)space-nowrap">
+        <nav className="whitespace-nowrap">
           {sideBarTabs.map((tab, index) => {
             const activeLink = pathname === tab?.href;
             return (
@@ -102,11 +122,9 @@ function Sidebar({ isOpen, setIsOpen }) {
                   //   data-tooltip-style="light"
                   //   data-tooltip-placement="right"
                   href={tab.href}
-                  className={`flex group h-[55px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-white hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${
-                    isOpen ? "hover:bg-secondaryC" : ""
-                  } ${activeLink && isOpen ? "bg-secondaryC" : ""} ${
-                    activeLink ? "text-primaryC" : ""
-                  }`}
+                  className={`flex rounded-sm group whitespace-nowrap mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-secondaryC focus:text-secondaryC cursor-pointer w-full ${"hover:!bg-accentC"} ${
+                    activeLink ? "!bg-accentC !text-secondaryC" : ""
+                  } `}
                 >
                   <div
                     className={`text-2xl ${

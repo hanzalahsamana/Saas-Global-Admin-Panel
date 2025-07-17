@@ -3,26 +3,21 @@ import UnProtectedRoute from "@/AuthenticRouting/UnProtectedRoutes";
 import FormikForm from "@/Components/Forms/Form";
 import FormInput from "@/Components/Forms/FormInput";
 import { setCurrentUser } from "@/Redux/Authentication/AuthSlice";
-import { dispatch } from "@/Redux/Store";
 import { loginValidation } from "@/Utils/Validations/loginFormValidate";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const { currentUser } = useSelector((state) => state.currentUser);
-  console.log("currentUser", currentUser);
   const initialValues = {
     email: "hello@gmail.com",
     password: "123456",
   };
-
+  const dispatch = useDispatch();
   const handleSubmit = async (values) => {
-    console.log("login form values", values);
-
     dispatch(setCurrentUser(values));
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-(--secondaryC) px-4">
+    <div className="min-h-screen flex items-center justify-center bg-(--primaryC) px-4">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-md shadow-gray-400 ">
         <h1 className=" font-bold text-center mb-6">Login</h1>
 
@@ -31,18 +26,16 @@ const Login = () => {
           handleSubmit={handleSubmit}
           validationSchema={loginValidation}
           buttonLabel="Login"
-        > 
+        >
           <FormInput
             name="email"
             type="email"
-            className="!mt-8"
             size="large"
             placeholder="Email"
           />
           <FormInput
             name="password"
             type="password"
-            className="!mt-8"
             size="large"
             placeholder="Password"
           />
