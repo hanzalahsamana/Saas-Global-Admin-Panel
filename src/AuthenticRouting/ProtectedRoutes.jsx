@@ -1,7 +1,7 @@
 "use client";
 
 import DashbordLayout from "@/Components/Layout/DashboardLayout";
-import Loader from "@/Components/Loader/Loader";
+import Loader from "@/Components/Loader/loader";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
