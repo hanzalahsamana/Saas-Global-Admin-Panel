@@ -4,9 +4,9 @@ import Button from "../Actions/Button";
 
 const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
   return (
-    <div className="w-full overflow-auto rounded-xl border border-(--borderC) bg-white">
-      <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-(--primaryC) text-xs font-semibold uppercase text-(--secondaryC)">
+    <div className="w-full overflow-auto rounded-sm border border-borderC bg-white">
+      <table className="min-w-full text-sm text-left ">
+        <thead className="bg-primaryC text-xs font-semibold uppercase text-(--secondaryC)">
           <tr>
             {columns.map((col, idx) => (
               <th key={idx} className="px-4 py-3 whitespace-nowrap">
@@ -18,7 +18,7 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
             )}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="">
           {data.map((row, rowIdx) => {
             const rowActions =
               typeof actions === "function" ? actions(row) : actions;
@@ -26,20 +26,20 @@ const Table = ({ columns = [], data = [], actions = [], renderers = {} }) => {
               <tr
                 key={rowIdx}
                 className={`${
-                  rowIdx !== data.length - 1 && "border-b border-(--borderC)"
-                }  cursor-pointer transition-all duration-500 hover:bg-(--backgroundC)`}
+                  rowIdx !== data.length - 1 && "border-b border-borderC"
+                }  cursor-pointer transition-all duration-500 hover:bg-backgroundC text-textC `}
               >
                 {columns.map((col, colIdx) => {
                   const value = row[col];
                   const Renderer = renderers[col];
                   return (
-                    <td key={colIdx} className="px-4 py-3 whitespace-nowrap">
+                    <td key={colIdx} className="px-4 py-2 whitespace-nowrap">
                       {Renderer ? <Renderer value={value} row={row} /> : value}
                     </td>
                   );
                 })}
                 {actions.length > 0 && (
-                  <td className="px-4 py-3 flex gap-2 whitespace-nowrap">
+                  <td className="px-4 py-2 flex gap-2 whitespace-nowrap">
                     {rowActions.map((action, aIdx) => {
                       return (
                         <Button

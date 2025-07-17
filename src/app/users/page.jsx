@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import { CustomDropdown } from "@/Components/Actions/DropDown";
+import { DatePicker } from "@/Components/Actions/DatePicker";
 
 const columns = ["name", "email", "plan", "status", "createdAt", "totalStores"];
 
@@ -37,7 +38,7 @@ const statusRenderer = ({ value }) => {
 
   return (
     <span
-      className={`text-xs px-2 py-1 rounded-full font-medium ${
+      className={`text-xs px-4 py-1 rounded-sm font-medium ${
         statusColors[value] || "bg-gray-100 text-gray-600"
       }`}
     >
@@ -86,23 +87,26 @@ const Users = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="font-semibold">Users</h1>
-      <div className="flex">
-        <CustomDropdown
-          dropdownData={filterData}
-          dropdownHeading={selectedFilter ? selectedFilter : "Filter By"}
-          handleClick={handleClick}
-        />
-        <SearchBar
-          handleSearch={handleSearch}
-          searchValue={searchValue}
-          handleSubmit={handleSubmit}
-          placeholder="Search..."
-          setSearchValue={setSearchValue}
-          suggestData={["hanzalah", "ali", "de", "ded", "ali", "de", "ded"]}
-          loading={false}
-          isActive={!selectedFilter}
-        />
+      <div className="flex flex-col md:flex-row justify-between">
+        <h1 className="font-semibold">Users</h1>
+        <div className="flex">
+          <CustomDropdown
+            dropdownData={filterData}
+            dropdownHeading={selectedFilter ? selectedFilter : "Filter By"}
+            handleClick={handleClick}
+          />
+          <SearchBar
+            handleSearch={handleSearch}
+            searchValue={searchValue}
+            handleSubmit={handleSubmit}
+            placeholder="Search..."
+            setSearchValue={setSearchValue}
+            suggestData={["hanzalah", "ali", "de", "ded", "ali", "de", "ded"]}
+            loading={false}
+            isActive={!selectedFilter}
+          />
+          {selectedFilter === "Created At" && <DatePicker />}
+        </div>
       </div>
       <Table
         columns={columns}

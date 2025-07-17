@@ -15,47 +15,56 @@ import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
 import { FcInvite } from "react-icons/fc";
 import { FcShop } from "react-icons/fc";
+import { MdDashboard, MdSpaceDashboard } from "react-icons/md";
+import { FaStore, FaUser } from "react-icons/fa";
+import { BiSolidStore } from "react-icons/bi";
+import { PiContactlessPaymentFill } from "react-icons/pi";
+import { MdEmail } from "react-icons/md";
+import { IoAnalytics } from "react-icons/io5";
+import { SiGoogleanalytics } from "react-icons/si";
+import { BiSupport } from "react-icons/bi";
+import { IoMdSettings } from "react-icons/io";
 
 const sideBarTabs = [
   {
     label: "Dashboard",
-    icon: <FcMindMap />,
+    icon: <MdDashboard />,
     href: "/",
   },
   {
     label: "Users",
-    icon: <FcBusinessman />,
+    icon: <FaUser size={23} />,
     href: "/users",
   },
   {
     label: "Stores",
-    icon: <FcShop />,
+    icon: <BiSolidStore />,
     href: "/stores",
   },
   {
     label: "Subscriptions",
-    icon: <FcSalesPerformance />,
+    icon: <PiContactlessPaymentFill />,
     href: "/subscriptions",
   },
   {
     label: "Email Broadcast",
-    icon: <FcInvite />,
+    icon: <MdEmail />,
     href: "/email-broadcast",
   },
   {
     label: "Analytics",
-    icon: <FcComboChart />,
-    href: "/subscriptions",
+    icon: <SiGoogleanalytics />,
+    href: "/subscriptions/",
   },
   {
     label: "Support",
-    icon: <FcCustomerSupport />,
-    href: "/subscriptions",
+    icon: <BiSupport />,
+    href: "/subscriptions/",
   },
   {
     label: "Settings",
-    icon: <FcAutomatic />,
-    href: "/subscriptions",
+    icon: <IoMdSettings />,
+    href: "/subscriptions/",
   },
 ];
 
@@ -79,29 +88,31 @@ function Sidebar({ isOpen, setIsOpen }) {
   return (
     <Fragment>
       <div
-        className={`bg-white text-black overflow-hidden shadow-xl shadow-gray-300 h-[calc(100vh-50px)]  lg:h-[100vh] absolute inset-y-0 top-[50px] lg:top-0 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
-          isOpen ? "w-[230px]" : "w-[0px] lg:w-[60px]"
+        className={`absolute top-[50px] h-[calc(100vh-50px)] lg:relative lg:top-0 bg-primaryC text-black overflow-auto shadow-xl  shadow-gray-300 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
+          isOpen
+            ? "w-[230px] custom-scrollbar px-1"
+            : "w-[0px] lg:w-[65px] no-scrollbar lg:px-1"
         }`}
       >
         <div
           className={`w-[100%] h-[50px] overflow-hidden max-h-[50px] items-end gap-x-2`}
         >
           <p
-            className={`w-[60px] h-[100%] object-contain text-black ${
+            className={`w-[60px] h-[100%] object-contain text-secondaryC font-bold text-xl ${
               !isOpen ? "lg:flex justify-center items-center hidden" : "hidden"
             }`}
           >
             MT
           </p>
           <p
-            className={`w-[60%] h-[100%] pl-4 object-contain mb-3 text-black whitespace-nowrap ${
+            className={`w-[60%] h-[100%] pl-4 font-bold text-xl object-contain mb-3 text-secondaryC whitespace-nowrap ${
               isOpen ? "flex items-center" : "hidden"
             }`}
           >
             Multi Tenant
           </p>
         </div>
-        <nav className="(--primaryC)space-nowrap">
+        <nav className="whitespace-nowrap">
           {sideBarTabs.map((tab, index) => {
             const activeLink = pathname === tab?.href;
             return (
@@ -111,8 +122,8 @@ function Sidebar({ isOpen, setIsOpen }) {
                   //   data-tooltip-style="light"
                   //   data-tooltip-placement="right"
                   href={tab.href}
-                  className={`flex group mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-black hover:text-primaryC focus:text-primaryC cursor-pointer w-full ${"hover:!bg-(--backgroundC)"} ${
-                    activeLink ? "!bg-(--backgroundC)" : ""
+                  className={`flex rounded-sm group whitespace-nowrap mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-secondaryC focus:text-secondaryC cursor-pointer w-full ${"hover:!bg-accentC"} ${
+                    activeLink ? "!bg-accentC !text-secondaryC" : ""
                   } `}
                 >
                   <div
