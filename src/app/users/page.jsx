@@ -9,7 +9,6 @@ import { Datepicker } from "@/Components/Actions/DatePicker";
 import CustomDropdown from "@/Components/Actions/DropDown";
 import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import TablePagination from "@/Components/Tables/tablePagination";
-import { useSelector } from "react-redux";
 import { UsersContext } from "@/Context/Users/UsersContext";
 
 const columns = ["name", "email", "plan", "status", "createdAt", "totalStores"];

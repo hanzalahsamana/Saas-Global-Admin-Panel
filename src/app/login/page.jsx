@@ -5,7 +5,6 @@ import FormInput from "@/Components/Forms/FormInput";
 import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { loginValidation } from "@/Utils/Validations/loginFormValidate";
 import React, { useContext } from "react";
-import { useDispatch } from "react-redux";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -13,7 +12,6 @@ const Login = () => {
     email: "hello@gmail.com",
     password: "123456",
   };
-  const dispatch = useDispatch();
   const handleSubmit = async (values) => {
     login(values);
   };
@@ -21,7 +19,6 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-(--primaryC) px-4">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-md shadow-gray-400 ">
         <h1 className=" font-bold text-center mb-6">Login</h1>
-
         <FormikForm
           initialValues={initialValues}
           handleSubmit={handleSubmit}

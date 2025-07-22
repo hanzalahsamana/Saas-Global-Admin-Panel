@@ -7,7 +7,8 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
-import React, { useEffect, useState } from "react";
+import { SubscriptionsContext } from "@/Context/Subscription/subscriptionsContext";
+import React, { useContext, useEffect, useState } from "react";
 
 const columns = [
   "userName",
@@ -103,6 +104,9 @@ const Subscriptions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
   const [dateRange, setDateRange] = useState([null, null]);
+
+  const { subscriptions, pagination, subscriptionLoading } =
+    useContext(SubscriptionsContext);
 
   const tableActions = (data) => [
     {
@@ -204,7 +208,7 @@ const Subscriptions = () => {
       />
       <Table
         columns={columns}
-        data={subscriptionsData.data}
+        data={subscriptions}
         actions={tableActions}
         renderers={{ paymentStatus: paymentStatusRenderer }}
       />
@@ -213,9 +217,9 @@ const Subscriptions = () => {
         currentPage={currentPage}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
-        loading={false}
+        loading={subscriptionLoading}
         handleSubmit={handleDataLimit}
-        data={subscriptionsData}
+        data={{ pagination, data: subscriptions }}
       />
       <ConfirmationModal
         show={modalShow}

@@ -2,7 +2,6 @@ import Loader from "@/Components/Loader/loader";
 import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
 
 const UnProtectedRoute = (WrappedComponent) => {
   return () => {

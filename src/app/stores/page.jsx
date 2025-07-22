@@ -7,9 +7,8 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
-import { StoresContext } from "@/Context/Stores/storesSlice";
+import { StoresContext } from "@/Context/Stores/storesContext";
 import React, { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 const columns = ["name", "domain", "ownerEmail", "status", "createdAt", "plan"];
 
