@@ -1,7 +1,7 @@
 "use client";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import Table from "@/Components/Tables/Table";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
@@ -9,6 +9,8 @@ import { Datepicker } from "@/Components/Actions/DatePicker";
 import CustomDropdown from "@/Components/Actions/DropDown";
 import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import TablePagination from "@/Components/Tables/tablePagination";
+import { useSelector } from "react-redux";
+import { UsersContext } from "@/Context/Users/UsersContext";
 
 const columns = ["name", "email", "plan", "status", "createdAt", "totalStores"];
 
@@ -40,35 +42,6 @@ const plansData = [
   { label: "Premium", value: "premium" },
 ];
 
-const data = {
-  data: [
-    {
-      _id: "10",
-      name: "Hanzalah Samana",
-      email: "hanzalah@example.com",
-      plan: "Pro",
-      status: "Active",
-      createdAt: "2025-06-01",
-      totalStores: 1,
-    },
-    {
-      _id: "14",
-      name: "Fatima Khan",
-      email: "fatima@example.com",
-      plan: "Free",
-      status: "Suspended",
-      createdAt: "2025-05-12",
-      totalStores: 2,
-    },
-  ],
-  pagination: {
-    totalPages: 2,
-    skip: 0,
-    limit: 10,
-    total: 10,
-  },
-};
-
 const Users = () => {
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
@@ -78,6 +51,8 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
   const [dateRange, setDateRange] = useState([null, null]);
+
+  const { users, usersLoading, pagination } = useContext(UsersContext);
 
   const handleStatusSelect = (value) => {
     console.log("value", value);
@@ -182,7 +157,7 @@ const Users = () => {
       />
       <Table
         columns={columns}
-        data={data?.data}
+        data={users}
         actions={actions}
         renderers={{
           status: statusRenderer,
@@ -193,9 +168,9 @@ const Users = () => {
         currentPage={currentPage}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
-        loading={false}
+        loading={usersLoading}
         handleSubmit={handleDataLimit}
-        data={data}
+        data={{ pagination, data: users }}
       />
       <ConfirmationModal
         show={modalShow}

@@ -21,11 +21,8 @@ function SearchBar({
   useOutsideClick(inputRef, () => setIsInputActive(false));
 
   return (
-    <div className="relative min-w-full md:min-w-min w-max">
-      <div
-        className={`flex items-center h-[36px] gap-x-2 w-full`}
-        ref={inputRef}
-      >
+    <div className="relative min-w-full md:min-w-min w-max" ref={inputRef}>
+      <div className={`flex items-center h-[36px] gap-x-2 w-full`}>
         <input
           autoComplete="off"
           type="text"

@@ -25,15 +25,15 @@ function SearchSuggestions({
             {data?.map((item, index) => (
               <div
                 key={index}
-                className=" cursor-pointer hover:bg-(--backgroundC) py-2 px-3  border-b border-(--borderC)"
+                className=" cursor-pointer hover:bg-(--backgroundC) py-2 px-3 border-b  border-(--borderC)"
                 onClick={() => {
                   setSearchValue && setSearchValue(item);
                   setIsInputActive && setIsInputActive(false);
                 }}
               >
                 <div className="flex gap-x-2">
-                  <p className="font-bold m-0 text-xs">{index + 1}.</p>
-                  <p className="m-0 text-xs whitespace-nowrap">{item}</p>
+                  <p className="font-bold m-0 text-sm">{index + 1}.</p>
+                  <p className="m-0 text-sm whitespace-nowrap">{item}</p>
                 </div>
               </div>
             ))}

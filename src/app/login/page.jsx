@@ -2,19 +2,20 @@
 import UnProtectedRoute from "@/AuthenticRouting/UnProtectedRoutes";
 import FormikForm from "@/Components/Forms/Form";
 import FormInput from "@/Components/Forms/FormInput";
-import { setCurrentUser } from "@/Redux/Authentication/AuthSlice";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { loginValidation } from "@/Utils/Validations/loginFormValidate";
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
   const initialValues = {
     email: "hello@gmail.com",
     password: "123456",
   };
   const dispatch = useDispatch();
   const handleSubmit = async (values) => {
-    dispatch(setCurrentUser(values));
+    login(values);
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--primaryC) px-4">

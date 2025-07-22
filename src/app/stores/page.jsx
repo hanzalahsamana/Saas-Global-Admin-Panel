@@ -7,7 +7,9 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
-import React, { useEffect, useState } from "react";
+import { StoresContext } from "@/Context/Stores/storesSlice";
+import React, { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const columns = ["name", "domain", "ownerEmail", "status", "createdAt", "plan"];
 
@@ -54,6 +56,7 @@ const Stores = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
   const [dateRange, setDateRange] = useState([null, null]);
+  const { stores, pagination, storesLoading } = useContext(StoresContext);
 
   const actions = (store) => [
     {
@@ -128,7 +131,7 @@ const Stores = () => {
   };
 
   return (
-    <div className="p-6 space-y-4 min-h-[calc(100vh-50px)] flex flex-col">
+    <div className="p-6 space-y-6 min-h-[calc(100vh-50px)] flex flex-col">
       <div className="flex flex-col md:flex-row justify-between w-full">
         <SearchBar
           handleSearch={handleSearch}
@@ -165,7 +168,7 @@ const Stores = () => {
 
       <Table
         columns={columns}
-        data={storesData.data}
+        data={stores}
         actions={actions}
         renderers={renderers}
       />
@@ -175,9 +178,9 @@ const Stores = () => {
         currentPage={currentPage}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
-        loading={false}
+        loading={storesLoading}
         handleSubmit={handleDataLimit}
-        data={storesData}
+        data={{ pagination, data: stores }}
       />
       <ConfirmationModal
         show={modalShow}

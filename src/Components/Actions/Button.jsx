@@ -20,7 +20,7 @@ const Button = ({
   const buttonStyles = {
     outline:
       "border border-accentC text-accentC bg-transparent  leading-[calc(1em)]",
-    primary: "bg-primaryC text-secondaryC",
+    primary: "bg-primaryC text-secondaryC hover:bg-accentC",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",
     white: "bg-(--secondaryC) border text-(--textC) !border-(--borderC)",
@@ -37,7 +37,7 @@ const Button = ({
       onClick={action}
       disabled={loading || disabled}
       type={type}
-      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded transition-all duration-300 ease-in-out
+      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded transition-all duration-300 ease-linear
     ${buttonSizes[size]}
     ${
       loading || disabled

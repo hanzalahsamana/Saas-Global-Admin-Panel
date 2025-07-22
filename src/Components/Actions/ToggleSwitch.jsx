@@ -1,18 +1,16 @@
 import React from "react";
-import { useFormikContext } from "formik";
-
 const ToggleSwitch = ({ label, value, onChange }) => {
   const checked = value;
 
   return (
-    <div className="flex items-center space-x-3">
+    <div className="flex items-center space-x-3 cursor-pointer ">
       <label className="font-medium text-gray-700">{label}</label>
       <button
         type="button"
         onClick={() => {
           onChange();
         }}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+        className={`relative inline-flex cursor-pointer h-6 w-11 items-center rounded-full transition-colors ${
           checked ? "bg-(--accentC)" : "bg-gray-300"
         }`}
       >

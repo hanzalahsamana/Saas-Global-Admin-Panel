@@ -54,6 +54,7 @@ const Table = ({
                   {actions.length > 0 && (
                     <td className="px-4 py-2 flex gap-2 whitespace-nowrap">
                       {rowActions.map((action, aIdx) => {
+                        // if (!action.label) return;
                         return (
                           <Button
                             key={aIdx}
@@ -61,6 +62,7 @@ const Table = ({
                             variant="outline"
                             className="!text-xs !py-2 !rounded-sm"
                             label={action.label}
+                            disabled={action?.disabled}
                           />
                         );
                       })}

@@ -2,10 +2,8 @@
 import "react-toastify/dist/ReactToastify.css";
 import "@/Styles/globals.css";
 import { Assistant } from "next/font/google";
-import { store } from "@/Redux/Store";
 import { ToastContainer } from "react-toastify";
-import ReduxProviderWrap from "@/Components/Layout/ReduxProviderWrap";
-import { Provider } from "react-redux";
+import AllProviders from "@/Components/Layout/AllProviderWrap";
 
 
 const assistant = Assistant({
@@ -23,10 +21,8 @@ export default function RootLayout({ children }) {
         className={`${assistant.className} antialiased`}
         suppressHydrationWarning
       >
-        <Provider store={store}>
-          <ToastContainer />
-          <ReduxProviderWrap>{children}</ReduxProviderWrap>
-        </Provider>
+        <ToastContainer />
+        <AllProviders>{children}</AllProviders>
       </body>
     </html>
   );

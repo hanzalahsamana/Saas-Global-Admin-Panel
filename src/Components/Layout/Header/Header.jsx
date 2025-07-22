@@ -1,15 +1,16 @@
 import Button from "@/Components/Actions/Button";
-import { logoutUser } from "@/Redux/Authentication/AuthSlice";
-import { dispatch } from "@/Redux/Store";
+import { AuthContext, logoutUser } from "@/Context/Authentication/AuthContext";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
 import { TfiMenu } from "react-icons/tfi";
 
 const Header = ({ toggleSidebar }) => {
   const pathName = usePathname();
-  console.log("pathName", pathName);
   const cleanPath = pathName.replace(/^\//, "");
+
+  const { logout } = useContext(AuthContext);
   return (
     <header className=" h-[50px] sticky top-0 bg-secondaryC  border-b border-gray-200 shadow-sm z-20 w-full">
       <div className="h-[100%] flex justify-between items-center w-full">
@@ -29,11 +30,7 @@ const Header = ({ toggleSidebar }) => {
         <div className="flex text-primaryC items-center gap-x-6 pr-6">
           <FaUser size={20} className="cursor-pointer" />
           <IoIosSettings size={25} className="cursor-pointer" />
-          <FaSignOutAlt
-            size={20}
-            className="cursor-pointer"
-            onClick={() => dispatch(logoutUser())}
-          />
+          <FaSignOutAlt size={20} className="cursor-pointer" onClick={logout} />
         </div>
       </div>
     </header>

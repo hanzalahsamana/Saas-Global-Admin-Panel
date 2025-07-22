@@ -1,13 +1,12 @@
 import Loader from "@/Components/Loader/loader";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const UnProtectedRoute = (WrappedComponent) => {
   return () => {
-    const { currentUser, userLoading } = useSelector(
-      (state) => state.currentUser
-    );
+    const { currentUser, userLoading } = useContext(AuthContext);
     const router = useRouter();
 
     useEffect(() => {
