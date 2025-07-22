@@ -10,7 +10,7 @@ function SearchSuggestions({
   return (
     <>
       <div
-        className={`w-[100%] bg-[#FFFFFF] py-2 shadow-lite rounded-lg border-b border-r border-l border-t border-(--borderC)`}
+        className={`w-[100%] bg-[#FFFFFF] py-2 shadow-lite rounded-md border border-borderC`}
       >
         {loading ? (
           <div className="flex justify-center p-2">

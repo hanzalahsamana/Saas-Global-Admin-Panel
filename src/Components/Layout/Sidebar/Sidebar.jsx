@@ -56,11 +56,11 @@ const sideBarTabs = [
     icon: <SiGoogleanalytics />,
     href: "/subscriptions/",
   },
-  {
-    label: "Support",
-    icon: <BiSupport />,
-    href: "/subscriptions/",
-  },
+  // {
+  //   label: "Support",
+  //   icon: <BiSupport />,
+  //   href: "/subscriptions/",
+  // },
   {
     label: "Settings",
     icon: <IoMdSettings />,
@@ -88,10 +88,8 @@ function Sidebar({ isOpen, setIsOpen }) {
   return (
     <Fragment>
       <div
-        className={`absolute top-[50px] h-[calc(100vh-50px)] lg:relative lg:top-0 bg-primaryC text-black overflow-auto shadow-xl  shadow-gray-300 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
-          isOpen
-            ? "w-[230px] custom-scrollbar px-1"
-            : "w-[0px] lg:w-[65px] no-scrollbar lg:px-1"
+        className={`bg-primaryC overflow-hidden h-[calc(100vh-50px)] lg:h-[100vh] absolute inset-y-0 top-[50px] lg:top-0 left-0 lg:pt-0 transition-all duration-100 ease-out z-10 ${
+          isOpen ? "w-[230px] px-1" : "w-[0px] lg:w-[65px] lg:px-1"
         }`}
       >
         <div

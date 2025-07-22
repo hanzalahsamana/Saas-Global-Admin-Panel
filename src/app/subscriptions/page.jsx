@@ -2,7 +2,6 @@
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import Table from "@/Components/Tables/Table";
 import React from "react";
-import { FcSalesPerformance, FcTodoList } from "react-icons/fc";
 
 const subscriptions = [
   {
@@ -78,8 +77,6 @@ const Subscriptions = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="font-semibold">Subscriptions</h1>
-
       <Table
         columns={columns}
         data={subscriptions}

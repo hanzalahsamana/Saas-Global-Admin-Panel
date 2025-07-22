@@ -6,7 +6,7 @@ import SearchSuggestions from "./searchSuggestion";
 function SearchBar({
   handleSearch,
   searchValue = "",
-  isActive,
+  isDisabled,
   handleSubmit,
   tooltipText,
   placeholder,
@@ -32,15 +32,15 @@ function SearchBar({
           placeholder={placeholder}
           value={searchValue}
           onChange={(e) => handleSearch(e.target.value)}
-          className={`bg-white h-[36px] px-4 w-[75%] md:w-[300px]  placeholder:text-liteTextC text-sm border border-(--borderC) outline-none ${className}`}
+          className={`bg-white h-[36px] px-4 w-[75%] outline-none focus:ring-1 focus:ring-accentC rounded md:w-[300px]  placeholder:text-liteTextC text-sm border border-borderC ${className}`}
           onClick={() => setIsInputActive(true)}
         />
         <div className="min-w-[25%] md:min-w-min h-full">
           {isAction && (
             <Button
-              active={!isActive}
+              disabled={isDisabled}
               action={handleSubmit}
-              className="h-full !rounded-none"
+              className="h-full !w-full"
               label="Search"
               //   data-tooltip-target="tooltip-light"
               //   data-tooltip-style="light"
@@ -53,7 +53,7 @@ function SearchBar({
         </div>
       </div>
       {isInputActive && (
-        <div className="absolute w-full top-10 ">
+        <div className="absolute w-full top-12 z-10">
           <SearchSuggestions
             data={suggestData}
             loading={loading}

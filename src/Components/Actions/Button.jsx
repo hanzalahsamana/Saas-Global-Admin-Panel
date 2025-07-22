@@ -11,7 +11,7 @@ const Button = ({
   size = "small",
   variant = "primary", // Added variant prop
   action = () => {},
-  active = true,
+  disabled = false,
   icon = null,
   iconPosition = "left",
   iconOnHover = false,
@@ -19,7 +19,7 @@ const Button = ({
   // Define button styles based on variant
   const buttonStyles = {
     outline:
-      "border !border-(--primaryC) text-(--primaryC) bg-transparent  leading-[calc(1em)]",
+      "border border-accentC text-accentC bg-transparent  leading-[calc(1em)]",
     primary: "bg-primaryC text-secondaryC",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",
@@ -35,12 +35,12 @@ const Button = ({
   return (
     <button
       onClick={action}
-      disabled={loading || !active}
+      disabled={loading || disabled}
       type={type}
-      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded-[4px] transition-all duration-300 ease-in-out
+      className={`group w-full cursor-pointer disabled:cursor-not-allowed  inline-flex items-center justify-center rounded transition-all duration-300 ease-in-out
     ${buttonSizes[size]}
     ${
-      loading || !active
+      loading || disabled
         ? "cursor-not-allowed text-[#4f4c4c89] !bg-[#c5c5c589]"
         : buttonStyles[variant] || buttonStyles.primary
     } 
