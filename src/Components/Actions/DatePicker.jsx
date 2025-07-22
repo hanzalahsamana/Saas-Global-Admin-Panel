@@ -18,7 +18,7 @@ export function Datepicker({
         endDate={endDate}
         onChange={(update) => setDateRange(update)}
         dateFormat="MM-dd-yyyy"
-        className="border border-borderC rounded focus:border-accentC text-sm text-textC pr-10 py-2 pl-3 !w-full outline-none focus:outline-none"
+        className="border border-borderC rounded leading-tight focus:border-accentC text-sm text-textC pr-10 py-2 pl-3 !w-full outline-none focus:outline-none"
         placeholderText={placeholderText}
         maxDate={new Date()}
       />
