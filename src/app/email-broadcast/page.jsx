@@ -33,7 +33,7 @@ const EmailBroadcast = () => {
   const handleSubmit = (values) => {
     const finalPayload = { ...values, scheduleNow };
     console.log("Broadcasting Email →", finalPayload);
-  };
+  }; 
 
   const audienceOptions = [
     { label: "All Users", value: "All Users" },
@@ -66,12 +66,12 @@ const EmailBroadcast = () => {
               placeholder="Write your message..."
               rows={6}
             />
-            <FormDropdown
+            {/* <FormDropdown
               name="audience"
               label="Target Audience"
               layout="label"
               options={audienceOptions}
-            />
+            /> */}
 
             <div className="flex items-center gap-3 mb-6">
               <ToggleSwitch

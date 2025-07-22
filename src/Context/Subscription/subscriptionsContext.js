@@ -36,7 +36,7 @@ export const SubscriptionsProvider = ({ children }) => {
             amountPaid: "PKR 80,000",
             trialStart: "-",
             trialEnd: "-",
-            subscriptionId: "sub_77777777",
+            subscriptionId: "sub_77777777", 
         },
     ]);
 
