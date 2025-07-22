@@ -1,13 +1,13 @@
 "use client";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import React, { useState } from "react";
-import * as Yup from "yup";
 import FormInput from "@/Components/Forms/FormInput";
 import FormTextArea from "@/Components/Forms/FormTextArea";
 import FormDropdown from "@/Components/Forms/FormDropdown";
 import FormikForm from "@/Components/Forms/Form";
 import ToggleSwitch from "@/Components/Actions/ToggleSwitch";
 import Table from "@/Components/Tables/Table";
+import { emailValidationSchema } from "@/Utils/Validations/emailValidation";
 
 const EmailBroadcast = () => {
   const [scheduleNow, setScheduleNow] = useState(false);
@@ -20,20 +20,10 @@ const EmailBroadcast = () => {
     scheduledAt: "",
   };
 
-  const validationSchema = Yup.object({
-    subject: Yup.string().required("Subject is required"),
-    body: Yup.string().required("Email body is required"),
-    audience: Yup.string().required("Audience is required"),
-    scheduledAt: Yup.string().when("scheduleNow", {
-      is: false,
-      then: Yup.string().required("Scheduled date & time is required"),
-    }),
-  });
-
   const handleSubmit = (values) => {
     const finalPayload = { ...values, scheduleNow };
     console.log("Broadcasting Email →", finalPayload);
-  }; 
+  };
 
   const audienceOptions = [
     { label: "All Users", value: "All Users" },
@@ -50,7 +40,7 @@ const EmailBroadcast = () => {
           </h2>
           <FormikForm
             initialValues={initialValues}
-            validationSchema={validationSchema}
+            validationSchema={emailValidationSchema}
             handleSubmit={handleSubmit}
             buttonLabel="Send Email"
           >
@@ -66,13 +56,12 @@ const EmailBroadcast = () => {
               placeholder="Write your message..."
               rows={6}
             />
-            {/* <FormDropdown
+            <FormDropdown
               name="audience"
               label="Target Audience"
               layout="label"
               options={audienceOptions}
-            /> */}
-
+            />
             <div className="flex items-center gap-3 mb-6">
               <ToggleSwitch
                 label="Send Now"
