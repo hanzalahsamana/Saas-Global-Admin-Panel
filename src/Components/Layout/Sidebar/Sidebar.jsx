@@ -1,29 +1,17 @@
 "use client";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import React from "react";
-import {
-  FcAutomatic,
-  FcBearish,
-  FcBusinessman,
-  FcComboChart,
-  FcCustomerSupport,
-  FcMindMap,
-  FcSalesPerformance,
-} from "react-icons/fc";
 import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
-import { FcInvite } from "react-icons/fc";
-import { FcShop } from "react-icons/fc";
 import { MdDashboard, MdSpaceDashboard } from "react-icons/md";
-import { FaStore, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { BiSolidStore } from "react-icons/bi";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 import { MdEmail } from "react-icons/md";
-import { IoAnalytics } from "react-icons/io5";
 import { SiGoogleanalytics } from "react-icons/si";
-import { BiSupport } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
+import { Tooltip } from "react-tooltip";
 
 const sideBarTabs = [
   {
@@ -116,9 +104,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             return (
               <Fragment key={index}>
                 <Link
-                  //   data-tooltip-target={"tooltip-" + index}
-                  //   data-tooltip-style="light"
-                  //   data-tooltip-placement="right"
+                  id={"tooltip-" + index}
                   href={tab.href}
                   className={`flex rounded-sm group whitespace-nowrap mb-1 h-[50px] transition-all duration-300 items-center no-underline hover:no-underline focus:no-underline text-secondaryC focus:text-secondaryC cursor-pointer w-full ${"hover:!bg-accentC"} ${
                     activeLink ? "!bg-accentC !text-secondaryC" : ""
@@ -155,17 +141,19 @@ function Sidebar({ isOpen, setIsOpen }) {
           })}
         </nav>
       </div>
-      {/* {adminTabs.map((item, index) => {
+      {sideBarTabs.map((item, index) => {
         return (
           <Fragment key={index}>
             {!isOpen && (
-              <Tooltip dataTooltipTarget={"tooltip-" + index}>
-                {item?.label}
-              </Tooltip>
+              <Tooltip
+                anchorSelect={"#tooltip-" + index}
+                content={item?.label}
+                place="right"
+              />
             )}
           </Fragment>
         );
-      })} */}
+      })}
     </Fragment>
   );
 }

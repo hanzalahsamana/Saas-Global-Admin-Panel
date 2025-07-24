@@ -8,13 +8,20 @@ export default function CustomDropdown({
   dropdownHeading,
   handleClick,
   position = "bottom end",
+  isIcon = true,
+  className = "",
+  buttonClass=""
 }) {
   return (
-    <div className="relative inline-block text-left h-full">
+    <div className={`inline-block text-left h-full ${className}`}>
       <Menu>
-        <MenuButton className="inline-flex cursor-pointer h-full transition-all duration-200 ease-linear hover:border-accentC items-center justify-between gap-x-6 border border-borderC min-w-[120px] px-2 rounded bg-white py-[6px] outline-none">
+        <MenuButton
+          className={`inline-flex cursor-pointer h-full transition-all duration-200 ease-linear hover:border-accentC items-center justify-between gap-x-6 border border-borderC min-w-[120px] px-2 rounded bg-white py-[6px] outline-none ${buttonClass}`}
+        >
           <div className="flex items-center gap-x-[2px]">
-            <CiFilter className="text-textC text-[17px] font-normal " />
+            {isIcon && (
+              <CiFilter className="text-textC text-[17px] font-normal " />
+            )}
             <p className="capitalize text-textC text-sm font-medium">
               {dropdownHeading}
             </p>
@@ -24,7 +31,7 @@ export default function CustomDropdown({
         <MenuItems
           anchor={position}
           transition
-          className="origin-top transition min-w-[120px] [--anchor-gap:8px] duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 outline-none bg-white border border-borderC rounded-md shadow-md p-1"
+          className="origin-top transition w-(--button-width) min-w-[120px] [--anchor-gap:8px] duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 outline-none bg-white border border-borderC rounded-md shadow-md p-1"
         >
           {dropdownData?.map((item, index) => {
             if (item.label.toLowerCase() === dropdownHeading.toLowerCase())

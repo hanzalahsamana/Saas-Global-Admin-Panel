@@ -2,15 +2,50 @@
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import React, { useState } from "react";
 import FormInput from "@/Components/Forms/FormInput";
-import FormTextArea from "@/Components/Forms/FormTextArea";
-import FormDropdown from "@/Components/Forms/FormDropdown";
 import FormikForm from "@/Components/Forms/Form";
 import ToggleSwitch from "@/Components/Actions/ToggleSwitch";
-import Table from "@/Components/Tables/Table";
 import { emailValidationSchema } from "@/Utils/Validations/emailValidation";
+import { useField, useFormikContext } from "formik";
+import CustomDropdown from "@/Components/Actions/DropDown";
+import EmailTemplate from "@/Components/UI/emailTemplate";
+import TextEditor from "@/Components/UI/textEditor";
+
+const AudienceDropdown = () => {
+  const { setFieldValue, values } = useFormikContext();
+  const [field, meta] = useField("audience");
+
+  const options = [
+    { label: "All Users", value: "All Users" },
+    { label: "Premium Users", value: "Premium Users" },
+    { label: "Inactive Users (30 days)", value: "Inactive Users (30 days)" },
+  ];
+
+  const handleAudienceSelect = (value) => {
+    setFieldValue("audience", value);
+  };
+
+  return (
+    <div className="my-4">
+      <CustomDropdown
+        dropdownData={options}
+        dropdownHeading={values.audience || "Select Audience"}
+        handleClick={handleAudienceSelect}
+        isIcon={false}
+        className="w-full"
+        buttonClass="w-full"
+      />
+      {meta.error && (
+        <div className="text-red-500 text-[13px] mt-2">{meta.error}</div>
+      )}
+    </div>
+  );
+};
 
 const EmailBroadcast = () => {
   const [scheduleNow, setScheduleNow] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
+
+  console.log("editorContent", editorContent);
 
   const initialValues = {
     subject: "",
@@ -24,12 +59,6 @@ const EmailBroadcast = () => {
     const finalPayload = { ...values, scheduleNow };
     console.log("Broadcasting Email →", finalPayload);
   };
-
-  const audienceOptions = [
-    { label: "All Users", value: "All Users" },
-    { label: "Premium Users", value: "Premium Users" },
-    { label: "Inactive Users (30 days)", value: "Inactive Users" },
-  ];
 
   return (
     <div className="p-6">
@@ -50,18 +79,11 @@ const EmailBroadcast = () => {
               placeholder="Enter subject..."
               layout="label"
             />
-            <FormTextArea
-              name="body"
-              label="Email Body"
-              placeholder="Write your message..."
-              rows={6}
+            <TextEditor
+              editorContent={editorContent}
+              setEditorContent={setEditorContent}
             />
-            <FormDropdown
-              name="audience"
-              label="Target Audience"
-              layout="label"
-              options={audienceOptions}
-            />
+            <AudienceDropdown />
             <div className="flex items-center gap-3 mb-6">
               <ToggleSwitch
                 label="Send Now"
@@ -84,16 +106,11 @@ const EmailBroadcast = () => {
             )}
           </FormikForm>
         </div>
-        <div className="w-[50%] p-6 border border-(--borderC) rounded-xl">
-          <h2 className="text-2xl w-full font-semibold mb-4 text-gray-800">
-            Previous Broadcast
-          </h2>
-          <Table
-            columns={["subject", "date"]}
-            data={[
-              { subject: "Welcome to our platform", date: "Jul 1, 2025" },
-              { subject: "July Sale is Live!", date: "Jul 10, 2025" },
-            ]}
+        <div className="w-[50%] border border-(--borderC) rounded-xl flex justify-center">
+          <EmailTemplate
+            action={true}
+            actionLabel={"Upload"}
+            message={editorContent}
           />
         </div>
       </div>

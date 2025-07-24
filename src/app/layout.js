@@ -1,9 +1,14 @@
 "use client";
 import "react-toastify/dist/ReactToastify.css";
-import "@/Styles/globals.css";
 import { Assistant } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import AllProviders from "@/Components/Layout/AllProviderWrap";
+import { useEffect } from "react";
+import 'react-tooltip/dist/react-tooltip.css'
+import "@/Styles/globals.css";
+import 'quill/dist/quill.snow.css';
+
+
 
 
 const assistant = Assistant({

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -194,6 +195,26 @@ body {
   -moz-appearance: textfield;
   /* Firefox */
 }
-.react-datepicker-wrapper{
+
+.react-datepicker-wrapper {
   width: 100%;
+}
+
+/* text editor styling  */
+.ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid #6b7280 !important;
+  background-color: #e5e7eb !important;
+}
+
+.ql-toolbar .ql-stroke {
+  stroke: #6b7280 !important;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #6b7280 !important;
+}
+
+.ql-toolbar .ql-picker-label {
+  color: #6b7280 !important;
 }
