@@ -44,8 +44,7 @@ const AudienceDropdown = () => {
 const EmailBroadcast = () => {
   const [scheduleNow, setScheduleNow] = useState(false);
   const [editorContent, setEditorContent] = useState("");
-
-  console.log("editorContent", editorContent);
+  const [isAction, setIsAction] = useState(false);
 
   const initialValues = {
     subject: "",
@@ -53,6 +52,8 @@ const EmailBroadcast = () => {
     audience: "All Users",
     scheduleNow: true,
     scheduledAt: "",
+    actionLink: "",
+    actionText: "",
   };
 
   const handleSubmit = (values) => {
@@ -77,13 +78,26 @@ const EmailBroadcast = () => {
               name="subject"
               label="Email Subject"
               placeholder="Enter subject..."
-              layout="label"
             />
             <TextEditor
               editorContent={editorContent}
               setEditorContent={setEditorContent}
             />
-            <AudienceDropdown />
+            {/* <AudienceDropdown /> */}
+            <div className="my-4">
+              <ToggleSwitch
+                label={"Action"}
+                value={isAction}
+                onChange={() => setIsAction((prev) => !prev)}
+              />
+            </div>
+            {isAction && (
+              <>
+                {" "}
+                <FormInput name="actionLink" placeholder="Action Link" />
+                <FormInput name="actionText" placeholder="Action Text" />
+              </>
+            )}
             <div className="flex items-center gap-3 mb-6">
               <ToggleSwitch
                 label="Send Now"
@@ -108,7 +122,7 @@ const EmailBroadcast = () => {
         </div>
         <div className="w-[50%] border border-(--borderC) rounded-xl flex justify-center">
           <EmailTemplate
-            action={true}
+            action={isAction}
             actionLabel={"Upload"}
             message={editorContent}
           />

@@ -10,13 +10,13 @@ const ToggleSwitch = ({ label, value, onChange }) => {
         onClick={() => {
           onChange();
         }}
-        className={`relative inline-flex cursor-pointer h-6 w-11 items-center rounded-full transition-colors ${
+        className={`relative inline-flex cursor-pointer h-4 w-8 items-center rounded-full transition-colors ${
           checked ? "bg-(--accentC)" : "bg-gray-300"
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            checked ? "translate-x-6" : "translate-x-1"
+          className={`inline-block h-2 w-2 transform rounded-full bg-white transition-transform ${
+            checked ? "translate-x-5" : "translate-x-1"
           }`}
         />
       </button>
