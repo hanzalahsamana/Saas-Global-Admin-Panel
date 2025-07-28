@@ -27,7 +27,7 @@ const FormikForm = ({
                 label={buttonLabel}
                 loading={loading}
                 size="large"
-                className="!mt-2 hover:scale-105 stop-text-reflection "
+                className="!mt-2 hover:scale-[1.02] stop-text-reflection "
               />
             </Form>
           );

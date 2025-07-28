@@ -6,6 +6,8 @@ function SearchSuggestions({
   data,
   setSearchValue,
   setIsInputActive,
+  handleSubmit,
+  selectedData,
 }) {
   return (
     <>
@@ -21,14 +23,19 @@ function SearchSuggestions({
             <p>Data Not Found</p>
           </div>
         ) : (
-          <div className="text-darkTextC text-sm font-medium max-h-[150px] overflow-auto no-scrollbar">
+          <div className="text-darkTextC text-sm font-medium max-h-[150px] px-2 overflow-auto custom-scrollbar">
             {data?.map((item, index) => (
               <div
                 key={index}
-                className=" cursor-pointer hover:bg-(--backgroundC) py-2 px-3 border-b  border-(--borderC)"
+                className={`cursor-pointer py-2 px-3 mb-1 text-textC rounded-md transition-all duration-300 ${
+                  selectedData && selectedData?.includes(item)
+                    ? "bg-hoverC border border-accentC"
+                    : "border border-borderC hover:bg-backgroundC"
+                }`}
                 onClick={() => {
-                  setSearchValue && setSearchValue(item);
-                  setIsInputActive && setIsInputActive(false);
+                  setSearchValue && !handleSubmit && setSearchValue(item);
+                  setIsInputActive && !selectedData && setIsInputActive(false);
+                  handleSubmit && handleSubmit(item);
                 }}
               >
                 <div className="flex gap-x-2">

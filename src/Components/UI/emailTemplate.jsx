@@ -1,5 +1,6 @@
 "use client";
 
+import { useFormikContext } from "formik";
 import Button from "../Actions/Button";
 
 export default function EmailTemplate({
@@ -9,6 +10,7 @@ export default function EmailTemplate({
   action,
   actionLabel,
 }) {
+  const { setFieldValue, values } = useFormikContext();
   return (
     <div className=" max-w-[500px] w-full p-6 flex justify-center items-center">
       <div className="max-w-xl w-full bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
@@ -25,7 +27,7 @@ export default function EmailTemplate({
           {action && (
             <div className="flex justify-center mt-2">
               {" "}
-              <Button variant="black" label={actionLabel} />
+              <Button variant="black" label={values.actionText} />
             </div>
           )}
         </div>

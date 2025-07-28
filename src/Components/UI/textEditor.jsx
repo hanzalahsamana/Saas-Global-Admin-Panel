@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useField, useFormikContext } from "formik";
 
 const Quill = dynamic(() => import("quill"), {
   ssr: false,
@@ -9,6 +10,11 @@ const Quill = dynamic(() => import("quill"), {
 });
 
 const TextEditor = ({ editorContent, setEditorContent, label, className }) => {
+  const { setFieldValue, values } = useFormikContext();
+  const [field, meta] = useField("body");
+
+  console.log("meta", meta);
+
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
@@ -43,16 +49,12 @@ const TextEditor = ({ editorContent, setEditorContent, label, className }) => {
       }
 
       quill.on("text-change", () => {
-        let content = quill.root.innerHTML;
-        // const plainText = quill.getText().trim();
-
-        // if (plainText === "") {
-        //     content = '';
-        // }
-
-        // if (content !== editorContent) {
+        let content = quill.root.innerHTML.trim();
+        if (content === "<p><br></p>") {
+          content = "";
+        }
         setEditorContent(content);
-        // }
+        setFieldValue("body", content);
       });
     });
 
@@ -68,7 +70,6 @@ const TextEditor = ({ editorContent, setEditorContent, label, className }) => {
     if (quillRef.current && editorContent !== quillRef.current.root.innerHTML) {
       quillRef.current.root.innerHTML = editorContent;
     }
-    console.log(editorContent, "🦍🦍🦍");
   }, [editorContent]);
 
   return (
@@ -86,6 +87,10 @@ const TextEditor = ({ editorContent, setEditorContent, label, className }) => {
           className="max-h-[150px] min-h-[100px] overflow-auto !border-none "
         ></div>
       </div>
+
+      {meta?.error && (
+        <div className="text-red-500 text-[13px] mt-2">{meta.error}</div>
+      )}
     </div>
   );
 };
