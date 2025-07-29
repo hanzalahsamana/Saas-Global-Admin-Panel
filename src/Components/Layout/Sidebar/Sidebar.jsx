@@ -149,6 +149,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 anchorSelect={"#tooltip-" + index}
                 content={item?.label}
                 place="right"
+                className="!z-[1000]"
               />
             )}
           </Fragment>

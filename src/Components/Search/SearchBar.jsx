@@ -45,7 +45,7 @@ function SearchBar({
         )}
       </div>
       {isInputActive && (
-        <div className="absolute w-full top-12 z-10">
+        <div className="absolute w-full top-12">
           <SearchSuggestions
             data={suggestData}
             loading={loading}
