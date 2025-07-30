@@ -2,7 +2,7 @@ import axios from "axios";
 import { Base_URL } from "../../../config";
 import { toast } from "react-toastify";
 
-export const getCurrentUser = async (token, setUserLoading, login) => {
+export const fetchCurrentUser = async (token, setUserLoading, login) => {
     try {
         const apiUrl = `${Base_URL}/getUserFromToken`;
         const response = await axios.get(apiUrl, {

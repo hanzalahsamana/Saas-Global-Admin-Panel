@@ -10,8 +10,9 @@ import CustomDropdown from "@/Components/Actions/DropDown";
 import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import TablePagination from "@/Components/Tables/tablePagination";
 import { UsersContext } from "@/Context/Users/UsersContext";
+import { fetchUsers } from "@/API/user/getUsers";
 
-const columns = ["name", "email", "plan", "status", "createdAt", "totalStores"];
+const columns = ["email", "status", "createdAt", "totalStores"];
 
 const statusRenderer = ({ value }) => {
   const statusColors = {
@@ -35,12 +36,6 @@ const statusData = [
   { label: "Suspended", value: "suspended" },
 ];
 
-const plansData = [
-  { label: "Basic", value: "basic" },
-  { label: "Advance", value: "advance" },
-  { label: "Premium", value: "premium" },
-];
-
 const Users = () => {
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
@@ -51,14 +46,17 @@ const Users = () => {
   const [dataLimit, setDataLimit] = useState(10);
   const [dateRange, setDateRange] = useState([null, null]);
 
-  const { users, usersLoading, pagination } = useContext(UsersContext);
+  const {
+    users,
+    usersLoading,
+    pagination,
+    handleUsers,
+    handleUsersLoading,
+    setPagination,
+  } = useContext(UsersContext);
 
   const handleStatusSelect = (value) => {
-    console.log("value", value);
     setSelectedFilters((prev) => ({ ...prev, status: value }));
-  };
-  const handlePlanSelect = (value) => {
-    setSelectedFilters((prev) => ({ ...prev, plan: value }));
   };
 
   const actions = (user) => [
@@ -85,32 +83,54 @@ const Users = () => {
 
   const handleFilterRemove = (filter) => {
     const { [filter]: deleted, ...newState } = selectedFilters;
+    if (filter === "date") {
+      setDateRange([null, null]);
+    }
     setSelectedFilters(newState);
   };
 
   const handleClearAll = (filter) => {
     setSelectedFilters({});
+    setDateRange([null, null]);
   };
 
   useEffect(() => {
     console.log("searchValue", searchValue);
   }, [searchValue]);
 
-  useEffect(() => {
-    console.log("filters query", {
+  const getUsers = async (page) => {
+    const token = localStorage.getItem("token");
+    if (page) {
+      setCurrentPage(page);
+    }
+    await fetchUsers(token, handleUsersLoading, setPagination, handleUsers, {
       ...selectedFilters,
-      page: currentPage,
+      page: page ? page : currentPage,
       limit: dataLimit,
-    });
-  }, [selectedFilters, currentPage, dataLimit]);
-
-  const handleDataLimit = () => {
-    console.log("Submit Data Limit", {
-      ...selectedFilters,
-      limit: dataLimit,
-      page: currentPage,
     });
   };
+
+  useEffect(() => {
+    getUsers();
+  }, [selectedFilters, currentPage]);
+
+  const handleDataLimit = () => {
+    getUsers(1);
+  };
+
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      const filterValues = {
+        ...selectedFilters,
+        dateRange: `${new Date(dateRange[0])
+          .toDateString()
+          .slice(4, 15)} - ${new Date(dateRange[1])
+          .toDateString()
+          .slice(4, 15)}`,
+      };
+      setSelectedFilters(filterValues);
+    }
+  }, [dateRange]);
 
   return (
     <div className="p-6 space-y-6 min-h-[calc(100vh-50px)] flex flex-col">
@@ -140,13 +160,6 @@ const Users = () => {
             }
             handleClick={handleStatusSelect}
           />{" "}
-          <CustomDropdown
-            dropdownData={plansData}
-            dropdownHeading={
-              selectedFilters.plan ? selectedFilters?.plan : "Plan"
-            }
-            handleClick={handlePlanSelect}
-          />{" "}
         </div>
       </div>
       <SelectedFilters
@@ -161,6 +174,7 @@ const Users = () => {
         renderers={{
           status: statusRenderer,
         }}
+        loading={usersLoading}
       />
       <TablePagination
         setCurrentPage={setCurrentPage}

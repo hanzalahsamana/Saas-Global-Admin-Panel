@@ -32,14 +32,14 @@ export const UsersProvider = ({ children }) => {
         total: 10,
     });
 
-    const [usersLoading, setUsersLoading] = useState(false);
+    const [usersLoading, setUsersLoading] = useState(true);
 
-    const handleSetUsers = (newUsers) => {
+    const handleUsers = (newUsers) => {
         setUsers(newUsers);
         setUsersLoading(false);
     };
 
-    const handleSetUsersLoading = (isLoading) => {
+    const handleUsersLoading = (isLoading) => {
         setUsersLoading(isLoading);
     };
 
@@ -47,10 +47,10 @@ export const UsersProvider = ({ children }) => {
         <UsersContext.Provider
             value={{
                 users,
-                setUsers: handleSetUsers,
                 usersLoading,
-                setUsersLoading: handleSetUsersLoading,
                 pagination,
+                handleUsers,
+                handleUsersLoading,
                 setPagination,
             }}
         >

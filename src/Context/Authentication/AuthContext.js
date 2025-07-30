@@ -1,5 +1,5 @@
 "use client";
-import { getCurrentUser } from "@/API/user/getCurrentUser";
+import { fetchCurrentUser } from "@/API/user/getCurrentUser";
 import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
 
     const getUser = async () => {
-      await getCurrentUser(JSON.parse(token), setUserLoading, login)
+      await fetchCurrentUser(JSON.parse(token), setUserLoading, login)
     }
     if (token) {
       getUser()
