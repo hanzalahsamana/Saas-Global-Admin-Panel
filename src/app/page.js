@@ -29,10 +29,11 @@ function Home() {
 
   const { handleAnalyticsLoading, handleAnalytics, analytics, analyticsLoading } = useContext(AnalyticsContext);
   const { activeStores, monthlyRevenue, monthlySignups, subscriptionPlan, suspendedStores, topStores, totalRevenue, totalSales, users } = analytics
-  console.log("analytics", analytics)
+
   useEffect(() => {
+    const token = localStorage.getItem("token")
     const getAnalytics = async () => {
-      const response = await fetchAnalytics(handleAnalyticsLoading, handleAnalytics)
+      const response = await fetchAnalytics(handleAnalyticsLoading, handleAnalytics, token)
       console.log("response", response)
     }
     getAnalytics()

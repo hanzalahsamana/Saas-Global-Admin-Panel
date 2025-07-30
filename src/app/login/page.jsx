@@ -1,4 +1,5 @@
 "use client";
+import { loginUser } from "@/API/Auth/login";
 import UnProtectedRoute from "@/AuthenticRouting/UnProtectedRoutes";
 import FormikForm from "@/Components/Forms/Form";
 import FormInput from "@/Components/Forms/FormInput";
@@ -7,13 +8,13 @@ import { loginValidation } from "@/Utils/Validations/loginFormValidate";
 import React, { useContext } from "react";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, userLoading } = useContext(AuthContext);
   const initialValues = {
-    email: "hello@gmail.com",
-    password: "123456",
+    email: "",
+    password: "",
   };
   const handleSubmit = async (values) => {
-    login(values);
+    await loginUser(values, login);
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--primaryC) px-4">
@@ -24,6 +25,7 @@ const Login = () => {
           handleSubmit={handleSubmit}
           validationSchema={loginValidation}
           buttonLabel="Login"
+          loading={userLoading}
         >
           <FormInput
             name="email"

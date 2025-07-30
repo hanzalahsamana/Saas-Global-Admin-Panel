@@ -5,7 +5,7 @@ export const AnalyticsContext = createContext();
 
 export const AnalyticsProvider = ({ children }) => {
     const [analytics, setAnalytics] = useState({});
-    const [analyticsLoading, setAnalyticsLoading] = useState(false);
+    const [analyticsLoading, setAnalyticsLoading] = useState(true);
 
     const handleAnalytics = (data) => {
         setAnalytics(data);

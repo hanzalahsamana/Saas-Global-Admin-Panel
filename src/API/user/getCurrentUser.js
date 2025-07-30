@@ -2,20 +2,19 @@ import axios from "axios";
 import { Base_URL } from "../../../config";
 import { toast } from "react-toastify";
 
-export const fetchAnalytics = async (handleAnalyticsLoading, handleAnalytics, token) => {
+export const getCurrentUser = async (token, setUserLoading, login) => {
     try {
-        handleAnalyticsLoading(true)
-        const apiUrl = `${Base_URL}/get/analytics/data`;
+        const apiUrl = `${Base_URL}/getUserFromToken`;
         const response = await axios.get(apiUrl, {
             headers: {
                 authorization: `Bearer ${token}`
             }
         });
-        const analytics = response.data;
-        handleAnalytics(analytics.data)
-        return analytics;
+        const user = response.data.user;
+        login(user)
+        return user;
     } catch (error) {
         toast.error(error?.response?.data?.message || error?.message);
-        handleAnalyticsLoading(false)
+        setUserLoading(false)
     }
 };
