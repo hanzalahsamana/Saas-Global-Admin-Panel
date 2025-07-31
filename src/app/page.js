@@ -15,6 +15,7 @@ import { FaChartSimple } from "react-icons/fa6";
 import { fetchAnalytics } from "@/API/Analytics/getAnalytics";
 import { AnalyticsContext } from "@/Context/Analytics/analyticsContext";
 import Loader from "@/Components/Loader/loader";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
 
 
 
@@ -26,12 +27,13 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 
 function Home() {
+  const { currentUser } = useContext(AuthContext)
 
   const { handleAnalyticsLoading, handleAnalytics, analytics, analyticsLoading } = useContext(AnalyticsContext);
   const { activeStores, monthlyRevenue, monthlySignups, subscriptionPlan, suspendedStores, topStores, totalRevenue, totalSales, users } = analytics
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = currentUser?.token
     const getAnalytics = async () => {
       const response = await fetchAnalytics(handleAnalyticsLoading, handleAnalytics, token)
       console.log("response", response)

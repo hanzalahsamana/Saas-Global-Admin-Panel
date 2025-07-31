@@ -19,7 +19,7 @@ const Button = ({
   // Define button styles based on variant
   const buttonStyles = {
     outline:
-      "border border-accentC text-accentC bg-transparent  leading-[calc(1em)]",
+      "border border-accentC text-accentC bg-transparent hover:border-primaryC hover:text-secondaryC hover:bg-primaryC  leading-[calc(1em)]",
     primary: "bg-primaryC text-secondaryC hover:bg-accentC",
     danger: "bg-red-600 text-(--backgroundC) shadow-[inset_0_-3.2px_#991b1b]",
     black: "bg-[#424242] text-(--backgroundC) shadow-[inset_0_-3.2px_#000000]",

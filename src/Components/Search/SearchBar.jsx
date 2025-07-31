@@ -2,6 +2,7 @@ import useOutsideClick from "@/Utils/hooks/useOutSideClick";
 import React, { useRef, useState } from "react";
 import Button from "../Actions/Button";
 import SearchSuggestions from "./searchSuggestion";
+import { Tooltip } from "react-tooltip";
 
 function SearchBar({
   handleSearch,
@@ -34,7 +35,10 @@ function SearchBar({
           onClick={() => setIsInputActive(true)}
         />
         {isAction && (
-          <div className="min-w-[25%] md:min-w-min h-full">
+          <div
+            className="min-w-[25%] md:min-w-min h-full"
+            id="searchbar-tooltip"
+          >
             <Button
               disabled={isDisabled}
               action={handleSubmit}
@@ -44,8 +48,16 @@ function SearchBar({
           </div>
         )}
       </div>
+      {isDisabled && (
+        <Tooltip
+          anchorSelect={"#searchbar-tooltip"}
+          content={tooltipText}
+          place="top"
+          className="!z-[1000]"
+        />
+      )}
       {isInputActive && (
-        <div className="absolute w-full top-12">
+        <div className="absolute w-full top-12 z-10">
           <SearchSuggestions
             data={suggestData}
             loading={loading}

@@ -14,6 +14,7 @@ export const UsersProvider = ({ children }) => {
     });
 
     const [usersLoading, setUsersLoading] = useState(true);
+    const [userStatusLoading, setUserStatusLoading] = useState(false);
 
     const handleUsers = (newUsers) => {
         setUsers(newUsers);
@@ -24,15 +25,26 @@ export const UsersProvider = ({ children }) => {
         setUsersLoading(isLoading);
     };
 
+    const updateUserStatus = (user) => {
+        const updatedUsers = users.map(u =>
+            u._id === user._id ? user : u
+        );
+        setUsers(updatedUsers);
+        setUserStatusLoading(false)
+    };
+
     return (
         <UsersContext.Provider
             value={{
-                users,
+                userStatusLoading,
                 usersLoading,
+                users,
                 pagination,
                 handleUsers,
                 handleUsersLoading,
                 setPagination,
+                updateUserStatus,
+                setUserStatusLoading
             }}
         >
             {children}

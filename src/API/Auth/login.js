@@ -10,7 +10,7 @@ export const loginUser = async (data, login) => {
         if (res?.user?.role !== "superAdmin") {
             throw new Error("Access denied!")
         }
-        login(res.user)
+        login({ ...res.user, token: res.token })
         localStorage.setItem("token", JSON.stringify(res.token));
         toast.success("Login Successfully");
         return res;

@@ -13,6 +13,8 @@ import { UsersContext } from "@/Context/Users/UsersContext";
 import { fetchUsers } from "@/API/user/getUsers";
 import { fetchEmailSuggest } from "@/API/SearchSuggest/getEmailSuggest";
 import { EmailSuggestContext } from "@/Context/SearchSuggest/emailSuggestContext";
+import { toggleUserStatus } from "@/API/user/toggleUserStatus";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
 
 const columns = ["email", "status", "createdAt", "totalStores"];
 
@@ -39,6 +41,7 @@ const statusData = [
 ];
 
 const Users = () => {
+  // hooks
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
@@ -55,6 +58,9 @@ const Users = () => {
     handleUsers,
     handleUsersLoading,
     setPagination,
+    updateUserStatus,
+    userStatusLoading,
+    setUserStatusLoading,
   } = useContext(UsersContext);
 
   const {
@@ -64,6 +70,44 @@ const Users = () => {
     handleEmailSuggestLoading,
   } = useContext(EmailSuggestContext);
 
+  const { currentUser } = useContext(AuthContext);
+  const { token } = currentUser;
+
+  useEffect(() => {
+    const getEmailSuggest = async () => {
+      await fetchEmailSuggest(
+        token,
+        handleEmailSuggests,
+        handleEmailSuggestLoading,
+        searchValue
+      );
+    };
+    getEmailSuggest();
+  }, [searchValue]);
+
+  useEffect(() => {
+    getUsers(1);
+  }, [selectedFilters]);
+
+  useEffect(() => {
+    getUsers();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      const filterValues = {
+        ...selectedFilters,
+        dateRange: `${new Date(dateRange[0])
+          .toDateString()
+          .slice(4, 15)} - ${new Date(dateRange[1])
+          .toDateString()
+          .slice(4, 15)}`,
+      };
+      setSelectedFilters(filterValues);
+    }
+  }, [dateRange]);
+
+  // functions
   const handleStatusSelect = (value) => {
     setSelectedFilters((prev) => ({ ...prev, status: value }));
   };
@@ -107,20 +151,6 @@ const Users = () => {
     setSearchValue("");
   };
 
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const getEmailSuggest = async () => {
-      await fetchEmailSuggest(
-        token,
-        handleEmailSuggests,
-        handleEmailSuggestLoading,
-        searchValue
-      );
-    };
-    getEmailSuggest();
-  }, [searchValue]);
-
   const getUsers = async (page) => {
     if (page) {
       setCurrentPage(page);
@@ -132,31 +162,21 @@ const Users = () => {
     });
   };
 
-  useEffect(() => {
-    getUsers(1);
-  }, [selectedFilters]);
-
-  useEffect(() => {
-    getUsers();
-  }, [currentPage]);
-
   const handleDataLimit = () => {
     getUsers(1);
   };
 
-  useEffect(() => {
-    if (dateRange[0] && dateRange[1]) {
-      const filterValues = {
-        ...selectedFilters,
-        dateRange: `${new Date(dateRange[0])
-          .toDateString()
-          .slice(4, 15)} - ${new Date(dateRange[1])
-          .toDateString()
-          .slice(4, 15)}`,
-      };
-      setSelectedFilters(filterValues);
+  const handleStatusChange = async () => {
+    if (selectedUser?._id && modalShow) {
+      await toggleUserStatus(
+        token,
+        selectedUser?._id,
+        updateUserStatus,
+        setUserStatusLoading
+      );
+      setModalShow(false);
     }
-  }, [dateRange]);
+  };
 
   return (
     <div className="p-6 space-y-6 min-h-[calc(100vh-50px)] flex flex-col">
@@ -170,6 +190,7 @@ const Users = () => {
           suggestData={emailSuggests}
           loading={emailSuggestsLoading}
           isDisabled={!searchValue}
+          tooltipText={"Please enter a value in search bar!"}
         />
         <div className="flex items-center justify-end gap-x-2 w-full">
           <div>
@@ -219,6 +240,8 @@ const Users = () => {
         } this user`}
         heading={"Confirm Please"}
         contentHeading="Are you sure?"
+        handleConfirm={handleStatusChange}
+        loading={userStatusLoading}
       />
     </div>
   );

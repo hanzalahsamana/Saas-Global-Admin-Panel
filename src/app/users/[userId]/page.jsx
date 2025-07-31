@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "next/navigation";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import { FiMail, FiUser } from "react-icons/fi";
@@ -9,14 +9,68 @@ import { BsBoxSeam } from "react-icons/bs";
 import Table from "@/Components/Tables/Table";
 import { FcBusinessman, FcShop } from "react-icons/fc";
 import { UsersContext } from "@/Context/Users/UsersContext";
+import { fetchUsers } from "@/API/user/getUsers";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
+import Loader from "@/Components/Loader/loader";
+
+const storeColumns = [
+  "_id",
+  "storeName",
+  "storeStatus",
+  "subscriptionStatus",
+  "plan",
+  "createdAt",
+];
+
+const statusRenderer = ({ value }) => {
+  console.log("value", value);
+  const statusColors = {
+    Active: "bg-green-100 text-green-700",
+    Suspended: "bg-red-100 text-red-600",
+  };
+
+  return (
+    <span
+      className={`text-xs px-4 py-1 rounded-sm font-medium ${
+        statusColors[value] || "bg-gray-100 text-gray-600"
+      }`}
+    >
+      {value}
+    </span>
+  );
+};
 
 const UserDetails = () => {
   const { userId } = useParams();
-
-  const { users, usersLoading, pagination } = useContext(UsersContext);
+  const { currentUser } = useContext(AuthContext);
+  const { token } = currentUser;
+  const {
+    userStatusLoading,
+    usersLoading,
+    users,
+    pagination,
+    handleUsers,
+    handleUsersLoading,
+    setPagination,
+    updateUserStatus,
+    setUserStatusLoading,
+  } = useContext(UsersContext);
   const user = users.find((u) => u._id === userId);
 
-  if (!user) {
+  useEffect(() => {
+    const getUsers = async () => {
+      await fetchUsers(
+        token,
+        handleUsersLoading,
+        setPagination,
+        handleUsers,
+        {}
+      );
+    };
+    getUsers();
+  }, []);
+
+  if (!user && !usersLoading) {
     return (
       <div className="p-6 text-black h-[calc(100vh-50px)] flex justify-center items-center text-2xl  font-semibold">
         User not found
@@ -24,15 +78,15 @@ const UserDetails = () => {
     );
   }
 
-  const storeColumns = [
-    "_id",
-    "storeName",
-    "storeStatus",
-    "subscriptionStatus",
-    "plan",
-    "createdAt",
-  ];
-  const storeData = user.stores.map((s) => ({
+  if (usersLoading) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-50px)]">
+        <Loader />
+      </div>
+    );
+  }
+
+  const storeData = user?.stores?.map((s) => ({
     _id: s._id,
     storeName: s.storeName,
     storeStatus: s.storeStatus,
@@ -40,24 +94,6 @@ const UserDetails = () => {
     plan: s.plan,
     createdAt: s.createdAt.split("T")[0],
   }));
-
-  const statusRenderer = ({ value }) => {
-    console.log("value", value);
-    const statusColors = {
-      Active: "bg-green-100 text-green-700",
-      Suspended: "bg-red-100 text-red-600",
-    };
-
-    return (
-      <span
-        className={`text-xs px-4 py-1 rounded-sm font-medium ${
-          statusColors[value] || "bg-gray-100 text-gray-600"
-        }`}
-      >
-        {value}
-      </span>
-    );
-  };
 
   return (
     <div className="p-6 space-y-8">

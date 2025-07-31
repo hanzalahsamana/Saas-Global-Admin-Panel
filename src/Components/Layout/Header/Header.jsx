@@ -1,5 +1,5 @@
 import Button from "@/Components/Actions/Button";
-import { AuthContext, logoutUser } from "@/Context/Authentication/AuthContext";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
 import { FaSignOutAlt, FaUser } from "react-icons/fa";
@@ -8,7 +8,11 @@ import { TfiMenu } from "react-icons/tfi";
 
 const Header = ({ toggleSidebar }) => {
   const pathName = usePathname();
-  const cleanPath = pathName.replace(/^\//, "");
+  let cleanPath = pathName.slice(1).replaceAll("/", "-");
+
+  if (cleanPath.length > 10) {
+    cleanPath = cleanPath.slice(0, 14) + "...";
+  }
 
   const { logout } = useContext(AuthContext);
   return (

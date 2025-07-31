@@ -11,7 +11,7 @@ export const fetchCurrentUser = async (token, setUserLoading, login) => {
             }
         });
         const user = response.data.user;
-        login(user)
+        login({ ...user, token })
         return user;
     } catch (error) {
         toast.error(error?.response?.data?.message || error?.message);

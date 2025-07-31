@@ -12,6 +12,7 @@ const ConfirmationModal = ({
   contentHeading,
   handleCancel,
   handleConfirm,
+  loading,
 }) => {
   return (
     <Dialog open={show} onClose={onHide} as={Fragment}>
@@ -49,6 +50,7 @@ const ConfirmationModal = ({
               action={handleConfirm}
               label="Confirm"
               className="!rounded-md border !border-(primaryC)"
+              loading={loading}
             />
           </div>
         </Dialog.Panel>
