@@ -11,6 +11,8 @@ import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import TablePagination from "@/Components/Tables/tablePagination";
 import { UsersContext } from "@/Context/Users/UsersContext";
 import { fetchUsers } from "@/API/user/getUsers";
+import { fetchEmailSuggest } from "@/API/SearchSuggest/getEmailSuggest";
+import { EmailSuggestContext } from "@/Context/SearchSuggest/emailSuggestContext";
 
 const columns = ["email", "status", "createdAt", "totalStores"];
 
@@ -55,6 +57,13 @@ const Users = () => {
     setPagination,
   } = useContext(UsersContext);
 
+  const {
+    emailSuggests,
+    emailSuggestsLoading,
+    handleEmailSuggests,
+    handleEmailSuggestLoading,
+  } = useContext(EmailSuggestContext);
+
   const handleStatusSelect = (value) => {
     setSelectedFilters((prev) => ({ ...prev, status: value }));
   };
@@ -77,29 +86,42 @@ const Users = () => {
     setSearchValue(value);
   };
 
-  const handleSubmit = async () => {
-    console.log("User Search Value", searchValue);
+  const handleSearchSubmit = async () => {
+    setSelectedFilters((prev) => ({ ...prev, email: searchValue }));
   };
 
   const handleFilterRemove = (filter) => {
     const { [filter]: deleted, ...newState } = selectedFilters;
-    if (filter === "date") {
+    if (filter === "dateRange") {
       setDateRange([null, null]);
+    }
+    if (filter === "email") {
+      setSearchValue("");
     }
     setSelectedFilters(newState);
   };
 
-  const handleClearAll = (filter) => {
+  const handleClearAll = () => {
     setSelectedFilters({});
     setDateRange([null, null]);
+    setSearchValue("");
   };
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    console.log("searchValue", searchValue);
+    const getEmailSuggest = async () => {
+      await fetchEmailSuggest(
+        token,
+        handleEmailSuggests,
+        handleEmailSuggestLoading,
+        searchValue
+      );
+    };
+    getEmailSuggest();
   }, [searchValue]);
 
   const getUsers = async (page) => {
-    const token = localStorage.getItem("token");
     if (page) {
       setCurrentPage(page);
     }
@@ -111,8 +133,12 @@ const Users = () => {
   };
 
   useEffect(() => {
+    getUsers(1);
+  }, [selectedFilters]);
+
+  useEffect(() => {
     getUsers();
-  }, [selectedFilters, currentPage]);
+  }, [currentPage]);
 
   const handleDataLimit = () => {
     getUsers(1);
@@ -138,12 +164,12 @@ const Users = () => {
         <SearchBar
           handleSearch={handleSearch}
           searchValue={searchValue}
-          handleSubmit={handleSubmit}
-          placeholder="Search..."
+          handleSubmit={handleSearchSubmit}
+          placeholder="Filter by email..."
           setSearchValue={setSearchValue}
-          suggestData={["hanzalah", "ali", "de", "ded", "ali", "de", "ded"]}
-          loading={false}
-          // isDisabled={!selectedSort}
+          suggestData={emailSuggests}
+          loading={emailSuggestsLoading}
+          isDisabled={!searchValue}
         />
         <div className="flex items-center justify-end gap-x-2 w-full">
           <div>

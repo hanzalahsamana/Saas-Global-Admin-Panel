@@ -4,32 +4,13 @@ import { createContext, useState } from "react";
 export const UsersContext = createContext();
 
 export const UsersProvider = ({ children }) => {
-    const [users, setUsers] = useState([
-        {
-            _id: "10",
-            name: "Hanzalah Samana",
-            email: "hanzalah@example.com",
-            plan: "Pro",
-            status: "Active",
-            createdAt: "2025-06-01",
-            totalStores: 1,
-        },
-        {
-            _id: "14",
-            name: "Fatima Khan",
-            email: "fatima@example.com",
-            plan: "Free",
-            status: "Suspended",
-            createdAt: "2025-05-12",
-            totalStores: 2,
-        },
-    ]);
+    const [users, setUsers] = useState([]);
 
     const [pagination, setPagination] = useState({
-        totalPages: 2,
+        totalPages: 0,
         skip: 0,
-        limit: 10,
-        total: 10,
+        limit: 0,
+        total: 0,
     });
 
     const [usersLoading, setUsersLoading] = useState(true);
