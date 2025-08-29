@@ -1,6 +1,6 @@
 "use client";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FormInput from "@/Components/Forms/FormInput";
 import FormikForm from "@/Components/Forms/Form";
 import ToggleSwitch from "@/Components/Actions/ToggleSwitch";
@@ -10,6 +10,7 @@ import TextEditor from "@/Components/UI/textEditor";
 import SearchBar from "@/Components/Search/SearchBar";
 import { useField, useFormikContext } from "formik";
 import CustomDropdown from "@/Components/Actions/DropDown";
+import Button from "@/Components/Actions/Button";
 
 const AudienceDropdown = ({ setSearchBarActive }) => {
   const { setFieldValue, values } = useFormikContext();
@@ -91,7 +92,7 @@ const EmailBroadcast = () => {
         initialValues={initialValues}
         validationSchema={emailValidationSchema(isAction)}
         handleSubmit={handleSubmit}
-        buttonLabel="Send Email"
+        isAction={false}
       >
         <div className="flex gap-x-4 w-full">
           <div className="bg-white rounded-xl w-[50%] border border-(--borderC) p-6">
@@ -140,6 +141,13 @@ const EmailBroadcast = () => {
                 <FormInput name="actionText" placeholder="Action Text" />
               </>
             )}
+            <Button
+              type="submit"
+              label={"Send Email"}
+              loading={false}
+              size="large"
+              className="!mt-2 hover:scale-[1.02] stop-text-reflection "
+            />
           </div>
           <div className="w-[50%] border border-(--borderC) rounded-xl flex justify-center">
             <EmailTemplate

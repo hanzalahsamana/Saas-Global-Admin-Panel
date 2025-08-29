@@ -22,12 +22,15 @@ export default function EmailTemplate({
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Hi [User Name],
           </h2>
-          {/* <p className="text-gray-700 leading-relaxed whitespace-pre-line">{message}</p> */}
           <div dangerouslySetInnerHTML={{ __html: message }} />
           {action && (
             <div className="flex justify-center mt-2">
               {" "}
-              <Button variant="black" label={values.actionText} />
+              <Button
+                variant="black"
+                label={values.actionText}
+                action={() => window.open(values?.actionLink, "_blank")}
+              />
             </div>
           )}
         </div>

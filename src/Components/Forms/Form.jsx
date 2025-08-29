@@ -9,6 +9,7 @@ const FormikForm = ({
   buttonLabel,
   initialValues = {},
   validationSchema,
+  isAction = true,
 }) => {
   return (
     <>
@@ -22,13 +23,15 @@ const FormikForm = ({
           return (
             <Form className="w-full">
               {children}
-              <Button
-                type="submit"
-                label={buttonLabel}
-                loading={loading}
-                size="large"
-                className="!mt-2 hover:scale-[1.02] stop-text-reflection "
-              />
+              {isAction && (
+                <Button
+                  type="submit"
+                  label={buttonLabel}
+                  loading={loading}
+                  size="large"
+                  className="!mt-2 hover:scale-[1.02] stop-text-reflection "
+                />
+              )}
             </Form>
           );
         }}
