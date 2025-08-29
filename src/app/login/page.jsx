@@ -19,7 +19,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--primaryC) px-4">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-md shadow-gray-400 ">
-        <h1 className=" font-bold text-center mb-6">Login</h1>
+        <h1 className="font-bold text-center mb-6 text-3xl">Login</h1>
         <FormikForm
           initialValues={initialValues}
           handleSubmit={handleSubmit}

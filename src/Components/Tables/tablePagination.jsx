@@ -20,8 +20,6 @@ const TablePagination = ({
   const totalPages = data?.pagination?.totalPages;
   const isDisabledNext = currentPage >= totalPages;
 
-  console.log("currentPage", currentPage);
-
   const getPaginationItems = () => {
     const pages = [];
     const siblings = 2;

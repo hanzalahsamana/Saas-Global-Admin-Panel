@@ -1,7 +1,7 @@
 "use client";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import Table from "@/Components/Tables/Table";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
@@ -46,9 +46,11 @@ const Users = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const [searchValue, setSearchValue] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
+  const [selectedFilters, setSelectedFilters] = useState({
+    limit: dataLimit,
+    page: 1,
+  });
   const [dateRange, setDateRange] = useState([null, null]);
 
   const {
@@ -74,42 +76,37 @@ const Users = () => {
   const { token } = currentUser;
 
   useEffect(() => {
-    const getEmailSuggest = async () => {
-      await fetchEmailSuggest(
+    const handler = setTimeout(() => {
+      fetchEmailSuggest(
         token,
         handleEmailSuggests,
         handleEmailSuggestLoading,
         searchValue
       );
-    };
-    getEmailSuggest();
+    }, 500);
+
+    return () => clearTimeout(handler);
   }, [searchValue]);
 
-  useEffect(() => {
-    getUsers(1);
-  }, [selectedFilters]);
-
-  useEffect(() => {
-    getUsers();
-  }, [currentPage]);
+  const handleSelectFilter = (data) => {
+    setSelectedFilters((prev) => ({ ...prev, page: 1, ...data }));
+  };
 
   useEffect(() => {
     if (dateRange[0] && dateRange[1]) {
-      const filterValues = {
-        ...selectedFilters,
+      handleSelectFilter({
         dateRange: `${new Date(dateRange[0])
           .toDateString()
           .slice(4, 15)} - ${new Date(dateRange[1])
           .toDateString()
           .slice(4, 15)}`,
-      };
-      setSelectedFilters(filterValues);
+      });
     }
   }, [dateRange]);
 
   // functions
   const handleStatusSelect = (value) => {
-    setSelectedFilters((prev) => ({ ...prev, status: value }));
+    handleSelectFilter({ status: value });
   };
 
   const actions = (user) => [
@@ -131,7 +128,7 @@ const Users = () => {
   };
 
   const handleSearchSubmit = async () => {
-    setSelectedFilters((prev) => ({ ...prev, email: searchValue }));
+    handleSelectFilter({ email: searchValue });
   };
 
   const handleFilterRemove = (filter) => {
@@ -142,35 +139,41 @@ const Users = () => {
     if (filter === "email") {
       setSearchValue("");
     }
-    setSelectedFilters(newState);
+    setSelectedFilters({ ...newState, page: 1 });
   };
 
   const handleClearAll = () => {
-    setSelectedFilters({});
     setDateRange([null, null]);
     setSearchValue("");
+    setSelectedFilters({ limit: dataLimit, page: 1 });
   };
 
-  const getUsers = async (page) => {
-    if (page) {
-      setCurrentPage(page);
-    }
-    await fetchUsers(token, handleUsersLoading, setPagination, handleUsers, {
-      ...selectedFilters,
-      page: page ? page : currentPage,
-      limit: dataLimit,
-    });
-  };
+  const getUsers = useCallback(async () => {
+    await fetchUsers(
+      token,
+      handleUsersLoading,
+      setPagination,
+      handleUsers,
+      selectedFilters
+    );
+  }, [selectedFilters]);
+
+  useEffect(() => {
+    getUsers();
+  }, [getUsers]);
 
   const handleDataLimit = () => {
-    getUsers(1);
+    handleSelectFilter({ limit: dataLimit });
   };
 
   const handleStatusChange = async () => {
     if (selectedUser?._id && modalShow) {
       await toggleUserStatus(
         token,
-        selectedUser?._id,
+        {
+          id: selectedUser?._id,
+          status: selectedUser?.status === "Active" ? "Suspended" : "Active",
+        },
         updateUserStatus,
         setUserStatusLoading
       );
@@ -224,8 +227,8 @@ const Users = () => {
         loading={usersLoading}
       />
       <TablePagination
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
+        setCurrentPage={(page) => handleSelectFilter({ page })}
+        currentPage={selectedFilters?.page}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
         loading={usersLoading}

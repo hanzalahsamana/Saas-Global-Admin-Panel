@@ -48,7 +48,10 @@ const Button = ({
     `}
     >
       {loading ? (
-        <ButtonLoader />
+        <div className="flex gap-2">
+          <ButtonLoader />
+          <span className="whitespace-nowrap">{label}</span>
+        </div>
       ) : (
         <>
           {icon && iconPosition === "left" && (

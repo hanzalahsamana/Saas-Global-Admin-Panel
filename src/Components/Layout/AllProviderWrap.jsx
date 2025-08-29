@@ -6,6 +6,7 @@ import {
 } from "@/Context/Analytics/analyticsContext";
 import { AuthProvider } from "@/Context/Authentication/AuthContext";
 import { EmailSuggestProvider } from "@/Context/SearchSuggest/emailSuggestContext";
+import { StoresSuggestProvider } from "@/Context/SearchSuggest/storesSuggestContext";
 import { StoresProvider } from "@/Context/Stores/storesContext";
 import { SubscriptionsProvider } from "@/Context/Subscription/subscriptionsContext";
 import { UsersProvider } from "@/Context/Users/UsersContext";
@@ -17,15 +18,17 @@ const AllProviders = ({ children }) => {
 
   return (
     <AuthProvider>
-      <EmailSuggestProvider>
-        <AnalyticsProvider>
-          <UsersProvider>
-            <StoresProvider>
-              <SubscriptionsProvider>{children} </SubscriptionsProvider>
-            </StoresProvider>
-          </UsersProvider>
-        </AnalyticsProvider>
-      </EmailSuggestProvider>
+      <StoresSuggestProvider>
+        <EmailSuggestProvider>
+          <AnalyticsProvider>
+            <UsersProvider>
+              <StoresProvider>
+                <SubscriptionsProvider>{children} </SubscriptionsProvider>
+              </StoresProvider>
+            </UsersProvider>
+          </AnalyticsProvider>
+        </EmailSuggestProvider>
+      </StoresSuggestProvider>
     </AuthProvider>
   );
 };

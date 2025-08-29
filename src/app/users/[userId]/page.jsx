@@ -70,7 +70,9 @@ const UserDetails = () => {
         {}
       );
     };
-    getUsers();
+    if (users?.length === 0) {
+      getUsers();
+    }
   }, []);
 
   if (usersLoading) {
@@ -97,7 +99,7 @@ const UserDetails = () => {
     plan: s.plan,
     createdAt: s.createdAt.split("T")[0],
   }));
-  
+
   const handleStatusChange = async () => {
     if (selectedUser?._id && isModalOpen) {
       await toggleUserStatus(

@@ -16,7 +16,7 @@ const Header = ({ toggleSidebar }) => {
 
   const { logout } = useContext(AuthContext);
   return (
-    <header className=" h-[50px] sticky top-0 bg-[#70009c] shadow-md z-20 w-full">
+    <header className=" h-[50px] sticky top-0 bg-primaryC shadow-md z-20 w-full border-l-accentC border-l border-r">
       <div className="h-[100%] flex justify-between items-center w-full">
         {/* toggle sidebar button  */}
         <div className="flex items-center">

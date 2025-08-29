@@ -141,7 +141,7 @@ function Home() {
           {summaryStats.map((stat, idx) => (
             <div
               key={idx}
-              className="bg-primaryC p-5 rounded-xl border border-accentC"
+              className="bg-accentC p-5 rounded-xl border border-primaryC"
             >
               <p className="text-secondaryC mb-2">{stat?.icon}</p>
               <p className="text-sm text-secondaryC">{stat.label}</p>

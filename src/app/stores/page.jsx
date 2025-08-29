@@ -1,4 +1,7 @@
 "use client";
+import { fetchStoresSuggest } from "@/API/SearchSuggest/getStoresName";
+import { fetchStores } from "@/API/Stores/getStores";
+import { toggleStoreStatus } from "@/API/Stores/toggleStoreStatus";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import { Datepicker } from "@/Components/Actions/DatePicker";
 import CustomDropdown from "@/Components/Actions/DropDown";
@@ -7,39 +10,20 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
+import { StoresSuggestContext } from "@/Context/SearchSuggest/storesSuggestContext";
 import { StoresContext } from "@/Context/Stores/storesContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
-const columns = ["name", "domain", "ownerEmail", "status", "createdAt", "plan"];
-
-const storesData = {
-  data: [
-    {
-      name: "Al-Haram Fabrics",
-      slug: "al-haram-fabrics",
-      domain: "alharam.mysaas.com",
-      ownerEmail: "hanzalah@example.com",
-      status: "Active",
-      createdAt: "2025-05-01",
-      plan: "Pro",
-    },
-    {
-      name: "Fabrico",
-      slug: "fabrico",
-      domain: "fabrico.mysaas.com",
-      ownerEmail: "fatima@example.com",
-      status: "Suspended",
-      createdAt: "2025-06-10",
-      plan: "Free",
-    },
-  ],
-  pagination: {
-    totalPages: 2,
-    skip: 0,
-    limit: 10,
-    total: 10,
-  },
-};
+const columns = [
+  "_id",
+  "storeName",
+  "email",
+  "createdAt",
+  "plan",
+  "storeStatus",
+  "subscriptionStatus",
+];
 
 const plansData = [
   { label: "Basic", value: "basic" },
@@ -51,20 +35,35 @@ const Stores = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedStore, setSelectedStore] = useState({});
   const [searchValue, setSearchValue] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
+  const [selectedFilters, setSelectedFilters] = useState({
+    limit: dataLimit,
+    page: 1,
+  });
   const [dateRange, setDateRange] = useState([null, null]);
-  const { stores, pagination, storesLoading } = useContext(StoresContext);
+  const {
+    stores,
+    handleSetStores,
+    storesLoading,
+    handleSetStoresLoading,
+    pagination,
+    setPagination,
+    updateStoreStatus,
+    storeStatusLoading,
+    setStoreStatusLoading,
+  } = useContext(StoresContext);
+  const {
+    storesSuggests,
+    storesSuggestsLoading,
+    handleStoresSuggests,
+    setStoresSuggestsLoading,
+  } = useContext(StoresSuggestContext);
+  const { currentUser } = useContext(AuthContext);
+  const { token } = currentUser;
 
   const actions = (store) => [
     {
-      label: "View",
-      onClick: (row) =>
-        console.log("Redirect to dashboard for store:", row.slug),
-    },
-    {
-      label: store.status === "Suspended" ? "Active" : "Suspend",
+      label: store?.storeStatus === "Suspended" ? "Active" : "Suspend",
       onClick: (row) => {
         setModalShow(true);
         setSelectedStore(row);
@@ -73,14 +72,16 @@ const Stores = () => {
   ];
 
   const renderers = {
-    status: ({ value }) => {
-      const statusColor =
-        value === "Active"
-          ? "bg-green-100 text-green-700"
-          : "bg-red-100 text-red-600";
+    storeStatus: ({ value }) => {
+      const statusColors = {
+        Active: "bg-green-100 text-green-700",
+        Suspended: "bg-red-100 text-red-600",
+      };
       return (
         <span
-          className={`text-xs px-2 py-1 rounded-full font-medium ${statusColor}`}
+          className={`text-xs px-4 py-1 rounded-sm font-medium ${
+            statusColors[value] || "bg-gray-100 text-gray-600"
+          }`}
         >
           {value}
         </span>
@@ -89,44 +90,95 @@ const Stores = () => {
   };
 
   const handlePlanSelect = (value) => {
-    setSelectedFilters((prev) => ({ ...prev, plan: value }));
+    handleSelectFilter({ plan: value });
   };
 
   const handleSearch = async (value) => {
     setSearchValue(value);
   };
 
+  const handleSelectFilter = async (data) => {
+    setSelectedFilters((prev) => ({ ...prev, page: 1, ...data }));
+  };
+
   const handleSubmit = async () => {
-    console.log("User Search Value", searchValue);
+    handleSelectFilter({ storeName: searchValue });
   };
 
   const handleFilterRemove = (filter) => {
     const { [filter]: deleted, ...newState } = selectedFilters;
-    setSelectedFilters(newState);
+    if (filter === "dateRange") {
+      setDateRange([null, null]);
+    }
+    if (filter === "storeName") {
+      setSearchValue("");
+    }
+    setSelectedFilters({ ...newState, page: 1 });
   };
 
   const handleClearAll = (filter) => {
-    setSelectedFilters({});
+    setDateRange([null, null]);
+    setSearchValue("");
+    setSelectedFilters({ limit: dataLimit, page: 1 });
   };
 
+  const getStores = useCallback(async () => {
+    await fetchStores(
+      token,
+      handleSetStoresLoading,
+      setPagination,
+      handleSetStores,
+      selectedFilters
+    );
+  }, [selectedFilters]);
+
   useEffect(() => {
-    console.log("searchValue", searchValue);
+    const handler = setTimeout(() => {
+      fetchStoresSuggest(
+        token,
+        handleStoresSuggests,
+        setStoresSuggestsLoading,
+        searchValue
+      );
+    }, 500);
+
+    return () => clearTimeout(handler);
   }, [searchValue]);
 
   useEffect(() => {
-    console.log("filters query", {
-      ...selectedFilters,
-      page: currentPage,
-      limit: dataLimit,
-    });
-  }, [selectedFilters, currentPage, dataLimit]);
+    getStores();
+  }, [getStores]);
+
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      const filterValues = {
+        ...selectedFilters,
+        dateRange: `${new Date(dateRange[0])
+          .toDateString()
+          .slice(4, 15)} - ${new Date(dateRange[1])
+          .toDateString()
+          .slice(4, 15)}`,
+      };
+      handleSelectFilter({ ...filterValues });
+    }
+  }, [dateRange]);
 
   const handleDataLimit = () => {
-    console.log("Submit Data Limit", {
-      ...selectedFilters,
-      limit: dataLimit,
-      page: currentPage,
-    });
+    handleSelectFilter({ limit: dataLimit });
+  };
+
+  const handleStatusChange = async () => {
+    await toggleStoreStatus(
+      token,
+      {
+        id: selectedStore?._id,
+        status:
+          selectedStore?.storeStatus === "Active" ? "Suspended" : "Active",
+      },
+      updateStoreStatus,
+      setStoreStatusLoading
+    );
+    setModalShow(false);
   };
 
   return (
@@ -138,9 +190,10 @@ const Stores = () => {
           handleSubmit={handleSubmit}
           placeholder="Search..."
           setSearchValue={setSearchValue}
-          suggestData={["hanzalah", "ali", "de", "ded", "ali", "de", "ded"]}
-          loading={false}
-          // isDisabled={!selectedSort}
+          suggestData={storesSuggests}
+          loading={storesSuggestsLoading}
+          isDisabled={!searchValue}
+          tooltipText={"Please enter a value in search bar!"}
         />
         <div className="flex items-center justify-end gap-x-2 w-full">
           <div>
@@ -170,11 +223,15 @@ const Stores = () => {
         data={stores}
         actions={actions}
         renderers={renderers}
+        loading={storesLoading}
       />
 
       <TablePagination
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
+        setCurrentPage={(page) =>
+          // setSelectedFilters((prev) => ({ ...prev, page }))
+          handleSelectFilter({ page })
+        }
+        currentPage={selectedFilters?.page}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
         loading={storesLoading}
@@ -189,6 +246,8 @@ const Stores = () => {
         } this store`}
         heading={"Confirm Please"}
         contentHeading="Are you sure?"
+        handleConfirm={handleStatusChange}
+        loading={storeStatusLoading}
       />
     </div>
   );

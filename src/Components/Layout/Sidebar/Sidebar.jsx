@@ -81,7 +81,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         }`}
       >
         <div
-          className={`w-[100%] h-[50px] overflow-hidden max-h-[50px] items-end gap-x-2`}
+          className={`w-[100%] h-[50px] overflow-hidden max-h-[50px] items-end gap-x-2 mb-4`}
         >
           <p
             className={`w-[60px] h-[100%] object-contain text-secondaryC font-bold text-xl ${

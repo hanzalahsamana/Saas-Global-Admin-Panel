@@ -1,11 +1,11 @@
 import { AiOutlineClose } from "react-icons/ai";
 
 export default function SelectedFilters({
-  selectedFilters = [],
+  selectedFilters = {},
   handleRemove,
   handleClearAll,
 }) {
-  if (selectedFilters.length === 0) return null;
+  if (Object.keys(selectedFilters)?.length === 0) return null;
 
   return (
     <div className="flex items-center h-10 justify-between bg-backgroundC px-4 py-2 rounded">
@@ -14,6 +14,7 @@ export default function SelectedFilters({
           Filters
         </span>
         {Object.keys(selectedFilters).map((filter, index) => {
+          if (filter === "limit" || filter === "page") return null;
           const value = selectedFilters[filter];
           return (
             <div
