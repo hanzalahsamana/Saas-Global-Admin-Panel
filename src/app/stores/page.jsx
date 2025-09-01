@@ -33,6 +33,45 @@ const subscriptionStatus = [
   { label: "Cancelled", value: "cancelled" },
 ];
 
+const subsStatusRenderer = ({ value }) => {};
+
+const renderers = {
+  storeStatus: ({ value }) => {
+    const statusColors = {
+      Active: "bg-green-100 text-green-700",
+      Suspended: "bg-red-100 text-red-600",
+    };
+    return (
+      <span
+        className={`text-xs px-4 py-1 rounded-sm font-medium ${
+          statusColors[value] || "bg-gray-100 text-gray-600"
+        }`}
+      >
+        {value}
+      </span>
+    );
+  },
+  subscriptionStatus: ({ value }) => {
+    const statusColors = {
+      active: "bg-green-100 text-green-700",
+      trial: "bg-yellow-100 text-yellow-700",
+      cancelled: "bg-red-100 text-red-600",
+      pending: "bg-blue-100 text-blue-700",
+      "trial expired": "bg-red-100 text-red-600",
+    };
+
+    return (
+      <span
+        className={`text-xs px-4 py-1 rounded-sm font-medium ${
+          statusColors[value] || "bg-gray-100 text-gray-600"
+        }`}
+      >
+        {value}
+      </span>
+    );
+  },
+};
+
 const Stores = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedStore, setSelectedStore] = useState({});
@@ -72,24 +111,6 @@ const Stores = () => {
       },
     },
   ];
-
-  const renderers = {
-    storeStatus: ({ value }) => {
-      const statusColors = {
-        Active: "bg-green-100 text-green-700",
-        Suspended: "bg-red-100 text-red-600",
-      };
-      return (
-        <span
-          className={`text-xs px-4 py-1 rounded-sm font-medium ${
-            statusColors[value] || "bg-gray-100 text-gray-600"
-          }`}
-        >
-          {value}
-        </span>
-      );
-    },
-  };
 
   const handlePlanSelect = (value) => {
     handleSelectFilter({ plan: value });
@@ -246,7 +267,7 @@ const Stores = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         content={`You want to ${
-          selectedStore?.status === "Active" ? "Suspend" : "Active"
+          selectedStore?.storeStatus === "Active" ? "Suspend" : "Active"
         } this store`}
         heading={"Confirm Please"}
         contentHeading="Are you sure?"

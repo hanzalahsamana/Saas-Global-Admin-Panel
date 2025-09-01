@@ -36,7 +36,7 @@ const statusData = [
 ];
 
 const statusRenderer = ({ value }) => {
-  const colorMap = {
+  const statusColors = {
     active: "bg-green-100 text-green-700",
     trial: "bg-yellow-100 text-yellow-700",
     cancelled: "bg-red-100 text-red-600",
@@ -46,8 +46,8 @@ const statusRenderer = ({ value }) => {
 
   return (
     <span
-      className={`text-xs px-2 py-1 rounded-[5px] font-medium ${
-        colorMap[value] || "bg-gray-100 text-gray-600"
+      className={`text-xs px-4 py-1 rounded-sm font-medium ${
+        statusColors[value] || "bg-gray-100 text-gray-600"
       }`}
     >
       {value}

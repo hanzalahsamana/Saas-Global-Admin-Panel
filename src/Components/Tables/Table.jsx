@@ -61,7 +61,11 @@ const Table = ({
                               col === "subsEnd" ? (
                                 value.split("T")[0]
                               ) : (
-                                value
+                                <span title={value}>
+                                  {String(value).length > 20
+                                    ? String(value).slice(0, 20) + "..."
+                                    : value}
+                                </span>
                               )
                             ) : (
                               "-"

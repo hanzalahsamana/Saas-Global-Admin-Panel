@@ -5,7 +5,7 @@ export default function SelectedFilters({
   handleRemove,
   handleClearAll,
 }) {
-  if (Object.keys(selectedFilters)?.length === 0) return null;
+  // if (Object.keys(selectedFilters)?.length === 0) return null;
 
   return (
     <div className="flex items-center h-10 justify-between bg-backgroundC px-4 py-2 rounded">

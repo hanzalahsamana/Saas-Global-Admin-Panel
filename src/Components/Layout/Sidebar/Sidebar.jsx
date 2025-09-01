@@ -42,7 +42,7 @@ const sideBarTabs = [
   {
     label: "Analytics",
     icon: <SiGoogleanalytics />,
-    href: "/subscriptions/",
+    href: "/analytics",
   },
   // {
   //   label: "Support",
