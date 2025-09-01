@@ -1,4 +1,7 @@
 "use client";
+import { fetchStoresSuggest } from "@/API/SearchSuggest/getStoresName";
+import { fetchSubscriptions } from "@/API/subscriptions/getSubscriptions";
+import { toggleSubsStatus } from "@/API/subscriptions/toggleSubscriptionStatus";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
 import { Datepicker } from "@/Components/Actions/DatePicker";
 import CustomDropdown from "@/Components/Actions/DropDown";
@@ -7,87 +10,43 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
+import { AuthContext } from "@/Context/Authentication/AuthContext";
+import { StoresSuggestContext } from "@/Context/SearchSuggest/storesSuggestContext";
 import { SubscriptionsContext } from "@/Context/Subscription/subscriptionsContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 const columns = [
-  "userName",
+  "_id",
+  "email",
   "storeName",
-  "plan",
-  "paymentStatus",
+  "status",
   "billingCycle",
-  "amountPaid",
-  "trialStart",
-  "trialEnd",
-  "subscriptionId",
+  "amount",
+  "subsStart",
+  "subsEnd",
+  "createdAt",
 ];
-
-const subscriptionsData = {
-  data: [
-    {
-      userName: "Hanzalah Samana",
-      storeName: "Store 1",
-      plan: "Basic",
-      paymentStatus: "Paid",
-      billingCycle: "Monthly",
-      amountPaid: "PKR 2,500",
-      trialStart: "2025-06-01",
-      trialEnd: "2025-06-08",
-      subscriptionId: "sub_123456789",
-    },
-    {
-      userName: "Fatima Khan",
-      storeName: "Store 2",
-      plan: "Premium",
-      paymentStatus: "Trial",
-      billingCycle: "Monthly",
-      amountPaid: "PKR 0",
-      trialStart: "2025-07-01",
-      trialEnd: "2025-07-08",
-      subscriptionId: "trial_987654321",
-    },
-    {
-      userName: "Ali Raza",
-      storeName: "Store 3",
-      plan: "Advance",
-      paymentStatus: "Failed",
-      billingCycle: "Annual",
-      amountPaid: "PKR 80,000",
-      trialStart: "-",
-      trialEnd: "-",
-      subscriptionId: "sub_77777777",
-    },
-  ],
-  pagination: {
-    totalPages: 2,
-    skip: 0,
-    limit: 10,
-    total: 10,
-  },
-};
 
 const statusData = [
-  { label: "Paid", value: "paid" },
-  { label: "Failed", value: "failed" },
   { label: "Trial", value: "trial" },
+  { label: "Trial Expired", value: "trial expired" },
+  { label: "Pending", value: "pending" },
+  { label: "Active", value: "active" },
+  { label: "Cancelled", value: "cancelled" },
 ];
 
-const plansData = [
-  { label: "Basic", value: "basic" },
-  { label: "Advance", value: "advance" },
-  { label: "Premium", value: "premium" },
-];
-
-const paymentStatusRenderer = ({ value }) => {
+const statusRenderer = ({ value }) => {
   const colorMap = {
-    Paid: "bg-green-100 text-green-700",
-    Trial: "bg-yellow-100 text-yellow-700",
-    Failed: "bg-red-100 text-red-600",
+    active: "bg-green-100 text-green-700",
+    trial: "bg-yellow-100 text-yellow-700",
+    cancelled: "bg-red-100 text-red-600",
+    pending: "bg-blue-100 text-blue-700",
+    "trial expired": "bg-red-100 text-red-600",
   };
 
   return (
     <span
-      className={`text-xs px-2 py-1 rounded-full font-medium ${
+      className={`text-xs px-2 py-1 rounded-[5px] font-medium ${
         colorMap[value] || "bg-gray-100 text-gray-600"
       }`}
     >
@@ -100,32 +59,56 @@ const Subscriptions = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
   const [searchValue, setSearchValue] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
   const [dataLimit, setDataLimit] = useState(10);
+  const [selectedFilters, setSelectedFilters] = useState({
+    limit: dataLimit,
+    page: 1,
+  });
   const [dateRange, setDateRange] = useState([null, null]);
 
-  const { subscriptions, pagination, subscriptionLoading } =
-    useContext(SubscriptionsContext);
+  const { currentUser } = useContext(AuthContext);
+  const { token } = currentUser;
+  const {
+    subscriptions,
+    handleSetSubscription,
+    subscriptionLoading,
+    setSubscriptionsLoading,
+    pagination,
+    updateSubsStatus,
+    setSubsStatusLoading,
+    subsStatusLoading,
+  } = useContext(SubscriptionsContext);
+  const {
+    storesSuggests,
+    storesSuggestsLoading,
+    handleStoresSuggests,
+    setStoresSuggestsLoading,
+  } = useContext(StoresSuggestContext);
 
-  const tableActions = (data) => [
-    {
-      label: "Cancel",
-      disabled: data.paymentStatus === "Trial",
-      onClick: (row) => {
-        setModalShow(true);
-        setSelectedSubscription(row);
+  const tableActions = (data) => {
+    if (data?.status === "trial" || data?.status === "trial expired") {
+      return [""];
+    }
+
+    return [
+      {
+        label:
+          data?.status === "pending" || data?.status === "cancelled"
+            ? "Active"
+            : data.status === "active"
+            ? "Cancel"
+            : "",
+
+        onClick: (row) => {
+          setModalShow(true);
+          setSelectedSubscription(row);
+        },
       },
-    },
-  ];
-
-  const handleStatusSelect = (value) => {
-    console.log("value", value);
-    setSelectedFilters((prev) => ({ ...prev, status: value }));
+    ];
   };
 
-  const handlePlanSelect = (value) => {
-    setSelectedFilters((prev) => ({ ...prev, plan: value }));
+  const handleStatusSelect = (value) => {
+    handleSelectFilter({ status: value });
   };
 
   const handleSearch = async (value) => {
@@ -133,7 +116,7 @@ const Subscriptions = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("User Search Value", searchValue);
+    handleSelectFilter({ storeName: searchValue });
   };
 
   const handleFilterRemove = (filter) => {
@@ -142,27 +125,71 @@ const Subscriptions = () => {
   };
 
   const handleClearAll = (filter) => {
-    setSelectedFilters({});
+    setSelectedFilters({ limit: dataLimit, page: 1 });
   };
 
   useEffect(() => {
-    console.log("searchValue", searchValue);
+    const handler = setTimeout(() => {
+      fetchStoresSuggest(
+        token,
+        handleStoresSuggests,
+        setStoresSuggestsLoading,
+        searchValue
+      );
+    }, 500);
+
+    return () => clearTimeout(handler);
   }, [searchValue]);
 
+  const getSubscriptions = useCallback(async () => {
+    await fetchSubscriptions(
+      token,
+      setSubscriptionsLoading,
+      handleSetSubscription,
+      selectedFilters
+    );
+  }, [selectedFilters]);
+
   useEffect(() => {
-    console.log("filters query", {
-      ...selectedFilters,
-      page: currentPage,
-      limit: dataLimit,
-    });
-  }, [selectedFilters, currentPage, dataLimit]);
+    getSubscriptions();
+  }, [getSubscriptions]);
+
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      handleSelectFilter({
+        dateRange: `${new Date(dateRange[0])
+          .toDateString()
+          .slice(4, 15)} - ${new Date(dateRange[1])
+          .toDateString()
+          .slice(4, 15)}`,
+      });
+    }
+  }, [dateRange]);
 
   const handleDataLimit = () => {
-    console.log("Submit Data Limit", {
-      ...selectedFilters,
-      limit: dataLimit,
-      page: currentPage,
-    });
+    handleSelectFilter({ limit: dataLimit });
+  };
+
+  const handleSelectFilter = (data) => {
+    setSelectedFilters((prev) => ({ ...prev, page: 1, ...data }));
+  };
+
+  const handleModalConfirm = async () => {
+    await toggleSubsStatus(
+      token,
+      {
+        id: selectedSubscription?._id,
+        status:
+          selectedSubscription?.status === "pending"
+            ? "active"
+            : selectedSubscription?.status === "active"
+            ? "cancelled"
+            : "active",
+      },
+      updateSubsStatus,
+      setSubsStatusLoading
+    );
+    setModalShow(false);
   };
   return (
     <div className="p-6 space-y-6 min-h-[calc(100vh-50px)] flex flex-col">
@@ -171,11 +198,12 @@ const Subscriptions = () => {
           handleSearch={handleSearch}
           searchValue={searchValue}
           handleSubmit={handleSubmit}
-          placeholder="Search..."
+          placeholder="Filter by Store Name"
           setSearchValue={setSearchValue}
-          suggestData={["hanzalah", "ali", "de", "ded", "ali", "de", "ded"]}
-          loading={false}
-          // isDisabled={!selectedSort}
+          suggestData={storesSuggests}
+          loading={storesSuggestsLoading}
+          isDisabled={!searchValue}
+          tooltipText={"Please enter a value in search bar!"}
         />
         <div className="flex items-center justify-end gap-x-2 w-full">
           <div>
@@ -192,13 +220,6 @@ const Subscriptions = () => {
             }
             handleClick={handleStatusSelect}
           />{" "}
-          <CustomDropdown
-            dropdownData={plansData}
-            dropdownHeading={
-              selectedFilters.plan ? selectedFilters?.plan : "Plan"
-            }
-            handleClick={handlePlanSelect}
-          />{" "}
         </div>
       </div>
       <SelectedFilters
@@ -210,11 +231,12 @@ const Subscriptions = () => {
         columns={columns}
         data={subscriptions}
         actions={tableActions}
-        renderers={{ paymentStatus: paymentStatusRenderer }}
+        renderers={{ status: statusRenderer }}
+        loading={subscriptionLoading}
       />
       <TablePagination
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
+        setCurrentPage={(page) => handleSelectFilter({ page })}
+        currentPage={selectedFilters.page}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
         loading={subscriptionLoading}
@@ -225,10 +247,15 @@ const Subscriptions = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         content={`You want to ${
-          selectedSubscription?.paymentStatus !== "Trial" && "Cancel"
+          selectedSubscription?.status === "pending" ||
+          selectedSubscription?.status === "cancelled"
+            ? "active"
+            : "Cancel"
         } subscription of this store`}
         heading={"Confirm Please"}
         contentHeading="Are you sure?"
+        handleConfirm={handleModalConfirm}
+        loading={subsStatusLoading}
       />
     </div>
   );

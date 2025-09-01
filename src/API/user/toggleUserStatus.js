@@ -5,8 +5,8 @@ import { Base_URL } from "../../../config";
 export const toggleUserStatus = async (token, data, updateUserStatus, statusUpdateLoading) => {
     try {
         statusUpdateLoading(true)
-        const apiUrl = `${Base_URL}/users/${data?.id}/status-toggle?status=${data?.status}`;
-        const response = await axios.put(apiUrl, {}, {
+        const apiUrl = `${Base_URL}/users/${data?.id}/status-toggle`;
+        const response = await axios.put(apiUrl, { status: data?.status }, {
             headers: {
                 authorization: `Bearer ${token}`
             }

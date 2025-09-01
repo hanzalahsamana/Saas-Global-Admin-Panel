@@ -25,10 +25,12 @@ const columns = [
   "subscriptionStatus",
 ];
 
-const plansData = [
-  { label: "Basic", value: "basic" },
-  { label: "Advance", value: "advance" },
-  { label: "Premium", value: "premium" },
+const subscriptionStatus = [
+  { label: "Trial", value: "trial" },
+  { label: "Trial Expired", value: "trial expired" },
+  { label: "Pending", value: "pending" },
+  { label: "Active", value: "active" },
+  { label: "Cancelled", value: "cancelled" },
 ];
 
 const Stores = () => {
@@ -188,7 +190,7 @@ const Stores = () => {
           handleSearch={handleSearch}
           searchValue={searchValue}
           handleSubmit={handleSubmit}
-          placeholder="Search..."
+          placeholder="Filter by Store Name..."
           setSearchValue={setSearchValue}
           suggestData={storesSuggests}
           loading={storesSuggestsLoading}
@@ -204,9 +206,11 @@ const Stores = () => {
             />
           </div>
           <CustomDropdown
-            dropdownData={plansData}
+            dropdownData={subscriptionStatus}
             dropdownHeading={
-              selectedFilters.plan ? selectedFilters?.plan : "Plan"
+              selectedFilters.plan
+                ? selectedFilters?.plan
+                : "Subscription Status"
             }
             handleClick={handlePlanSelect}
           />{" "}

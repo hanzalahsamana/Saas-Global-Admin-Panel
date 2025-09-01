@@ -56,7 +56,9 @@ const Table = ({
                             {Renderer ? (
                               <Renderer value={value} row={row} />
                             ) : value || value === 0 ? (
-                              col === "createdAt" ? (
+                              col === "createdAt" ||
+                              col === "subsStart" ||
+                              col === "subsEnd" ? (
                                 value.split("T")[0]
                               ) : (
                                 value
@@ -71,7 +73,8 @@ const Table = ({
                         <td className="px-4 py-2 flex gap-2 whitespace-nowrap">
                           {rowActions.map((action, aIdx) => {
                             // if (!action.label) return;
-                            return (
+                            console.log("action", action);
+                            return action ? (
                               <Button
                                 key={aIdx}
                                 action={() => action.onClick(row)}
@@ -80,6 +83,8 @@ const Table = ({
                                 label={action.label}
                                 disabled={action?.disabled}
                               />
+                            ) : (
+                              <p key={aIdx}>-</p>
                             );
                           })}
                         </td>

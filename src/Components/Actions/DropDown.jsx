@@ -10,7 +10,7 @@ export default function CustomDropdown({
   position = "bottom end",
   isIcon = true,
   className = "",
-  buttonClass=""
+  buttonClass = "",
 }) {
   return (
     <div className={`inline-block text-left h-full ${className}`}>
@@ -31,7 +31,7 @@ export default function CustomDropdown({
         <MenuItems
           anchor={position}
           transition
-          className="origin-top transition w-(--button-width) min-w-[120px] [--anchor-gap:8px] duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 outline-none bg-white border border-borderC rounded-md shadow-md p-1"
+          className="origin-top transition min-w-(--button-width) [--anchor-gap:8px] duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 outline-none bg-white border border-borderC rounded-md shadow-md p-1"
         >
           {dropdownData?.map((item, index) => {
             if (item.label.toLowerCase() === dropdownHeading.toLowerCase())
