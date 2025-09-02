@@ -30,20 +30,7 @@ const RevenueChart = () => {
         },
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: monthlyRevenue?.labels || [], // ✅ backend se labels
         labels: { style: { colors: "var(--primaryC)" } },
       },
       yaxis: {
@@ -55,25 +42,29 @@ const RevenueChart = () => {
     series: [
       {
         name: "Revenue (Rs)",
-        data: monthlyRevenue,
+        data: monthlyRevenue?.data || [], // ✅ backend se data
       },
     ],
   };
+
   return (
     <div className="bg-white p-6 rounded-xl custom-box-shadow">
       <div className="flex items-end gap-x-2 mb-4 ">
         <GrGraphQl size={25} className="text-primaryC" />
         <p className="font-bold text-textC text-lg leading-[1]">
-          {" "}
-          Monthly Revenue
+          Total Revenue
         </p>
       </div>
-      <Chart
-        options={revenueChart?.options}
-        series={revenueChart?.series}
-        type="area"
-        height={300}
-      />
+      {monthlyRevenue?.data?.length > 0 ? (
+        <Chart
+          options={revenueChart.options}
+          series={revenueChart.series}
+          type="area"
+          height={300}
+        />
+      ) : (
+        <p className="flex justify-center items-center">data not found</p>
+      )}
     </div>
   );
 };

@@ -19,7 +19,7 @@ const SubscriptionChart = () => {
         <div className="bg-white p-6 rounded-xl custom-box-shadow">
             <div className="flex items-end gap-x-2 mb-4 ">
                 <PiGraphFill size={30} className="text-primaryC" />
-                <p className=" font-bold text-textC text-lg"> Plan Distribution</p>
+                <p className=" font-bold text-textC text-lg"> Subscription Distribution</p>
             </div>
             <Chart
                 options={planDistribution?.options}

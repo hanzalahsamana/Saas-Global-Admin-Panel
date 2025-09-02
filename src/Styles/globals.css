@@ -218,3 +218,7 @@ body {
 .ql-toolbar .ql-picker-label {
   color: #6b7280 !important;
 }
+
+.react-datepicker__month-container {
+  float: unset !important;
+}

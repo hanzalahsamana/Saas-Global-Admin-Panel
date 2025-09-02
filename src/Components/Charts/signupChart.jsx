@@ -7,6 +7,7 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const SignupChart = () => {
   const { analytics } = useContext(AnalyticsContext);
   const { monthlySignups } = analytics;
+
   const signupChart = {
     options: {
       chart: {
@@ -22,20 +23,7 @@ const SignupChart = () => {
       },
       dataLabels: { enabled: false },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: monthlySignups?.labels || [], // ✅ backend se labels
         labels: { style: { colors: "var(--primaryC)" } },
       },
       yaxis: {
@@ -47,23 +35,23 @@ const SignupChart = () => {
     series: [
       {
         name: "Signups",
-        data: monthlySignups,
+        data: monthlySignups?.data || [], // ✅ backend se data
       },
     ],
   };
+
   return (
     <div>
       <div className="bg-white p-6 rounded-xl custom-box-shadow">
         <div className="flex items-end gap-x-2 mb-4 ">
           <SiGoogleanalytics size={22} className="text-primaryC" />
           <p className=" font-bold text-textC text-lg leading-[0.9]">
-            {" "}
-            Monthly Signups
+            Total Signups
           </p>
         </div>
         <Chart
-          options={signupChart?.options}
-          series={signupChart?.series}
+          options={signupChart.options}
+          series={signupChart.series}
           type="bar"
           height={300}
         />

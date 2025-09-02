@@ -27,7 +27,7 @@ function Home() {
   useEffect(() => {
     const token = currentUser?.token
     const getAnalytics = async () => {
-      await fetchAnalytics(handleAnalyticsLoading, handleAnalytics, token)
+      await fetchAnalytics(handleAnalyticsLoading, handleAnalytics, token,"")
     }
     getAnalytics()
   }, [])
