@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { BsArrowRightShort, BsShop } from "react-icons/bs";
 import { MdDashboard, MdSpaceDashboard } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import { FaFileInvoiceDollar, FaUser } from "react-icons/fa";
 import { BiSolidStore } from "react-icons/bi";
 import { PiContactlessPaymentFill } from "react-icons/pi";
 import { MdEmail } from "react-icons/md";
@@ -44,11 +44,11 @@ const sideBarTabs = [
     icon: <SiGoogleanalytics />,
     href: "/analytics",
   },
-  // {
-  //   label: "Support",
-  //   icon: <BiSupport />,
-  //   href: "/subscriptions/",
-  // },
+  {
+    label: "Invoices",
+    icon: <FaFileInvoiceDollar />,
+    href: "/invoices",
+  },
   {
     label: "Settings",
     icon: <IoMdSettings />,

@@ -75,10 +75,10 @@ export function Datepicker({
         startDate={startDate}
         endDate={endDate}
         onChange={(update) => {
-          // update hamesha [start, end] deta hai
           const [start, end] = update;
-          if (start && end) {
-            // Sirf tabhi set kare jab dono date select ho
+          if (start && !end) {
+            setDateRange([start]);
+          } else if (start && end) {
             setDateRange([start, end]);
           }
         }}

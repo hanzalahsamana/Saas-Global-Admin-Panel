@@ -15,6 +15,7 @@ import { fetchEmailSuggest } from "@/API/SearchSuggest/getEmailSuggest";
 import { EmailSuggestContext } from "@/Context/SearchSuggest/emailSuggestContext";
 import { toggleUserStatus } from "@/API/user/toggleUserStatus";
 import { AuthContext } from "@/Context/Authentication/AuthContext";
+import { InvoiceContext } from "@/Context/Invoices/invoiceContext";
 
 const columns = [
   { key: "_id", label: "User Id" },
@@ -26,8 +27,9 @@ const columns = [
 
 const statusRenderer = ({ value }) => {
   const statusColors = {
-    Active: "bg-green-100 text-green-700",
-    Suspended: "bg-red-100 text-red-600",
+    Paid: "bg-green-100 text-green-700",
+    Failed: "bg-red-100 text-red-600",
+    Pending: "bg-red-100 text-red-600",
   };
 
   return (
@@ -42,11 +44,12 @@ const statusRenderer = ({ value }) => {
 };
 
 const statusData = [
-  { label: "Active", value: "active" },
-  { label: "Suspended", value: "suspended" },
+  { label: "Failed", value: "failed" },
+  { label: "Pending", value: "pending" },
+  { label: "Paid", value: "paid" },
 ];
 
-const Users = () => {
+const Invoices = () => {
   // hooks
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
@@ -60,16 +63,16 @@ const Users = () => {
   const [dateRange, setDateRange] = useState([null, null]);
 
   const {
-    users,
-    usersLoading,
+    invoices,
+    invoiceLoading,
     pagination,
-    handleUsers,
-    handleUsersLoading,
+    handleInvoices,
+    setInvoiceLoading,
     setPagination,
-    updateUserStatus,
-    userStatusLoading,
-    setUserStatusLoading,
-  } = useContext(UsersContext);
+    updateInvoiceStatus,
+    invoiceStatusLoading,
+    setInvoiceStatusLoading,
+  } = useContext(InvoiceContext);
 
   const {
     emailSuggests,
@@ -114,20 +117,32 @@ const Users = () => {
   const handleStatusSelect = (value) => {
     handleSelectFilter({ status: value });
   };
+  const tableActions = (data) => {
+    const status = data?.status;
 
-  const actions = (user) => [
-    {
-      label: "View",
-      onClick: () => router.push(`/users/${user._id}`),
-    },
-    {
-      label: user.status === "Suspended" ? "Active" : "Suspend",
-      onClick: (row) => {
-        setModalShow(true);
-        setSelectedUser(row);
+    if (status === "pending") {
+      return ["Paid", "Failed"].map((label) => ({
+        label,
+        onClick: (row) => {
+          setModalShow(true);
+          setSelectedSubscription(row);
+        },
+      }));
+    }
+
+    const label =
+      status === "failed" ? "Paid" : status === "paid" ? "Failed" : "";
+
+    return [
+      {
+        label,
+        onClick: (row) => {
+          setModalShow(true);
+          setSelectedSubscription(row);
+        },
       },
-    },
-  ];
+    ];
+  };
 
   const handleSearch = async (value) => {
     setSearchValue(value);
@@ -157,9 +172,9 @@ const Users = () => {
   const getUsers = useCallback(async () => {
     await fetchUsers(
       token,
-      handleUsersLoading,
+      setInvoiceLoading,
       setPagination,
-      handleUsers,
+      handleInvoices,
       selectedFilters
     );
   }, [selectedFilters]);
@@ -180,8 +195,8 @@ const Users = () => {
           id: selectedUser?._id,
           status: selectedUser?.status === "Active" ? "Suspended" : "Active",
         },
-        updateUserStatus,
-        setUserStatusLoading
+        updateInvoiceStatus,
+        setInvoiceStatusLoading
       );
       setModalShow(false);
     }
@@ -225,21 +240,21 @@ const Users = () => {
       />
       <Table
         columns={columns}
-        data={users}
-        actions={actions}
+        data={invoices}
+        actions={tableActions}
         renderers={{
           status: statusRenderer,
         }}
-        loading={usersLoading}
+        loading={invoiceLoading}
       />
       <TablePagination
         setCurrentPage={(page) => handleSelectFilter({ page })}
         currentPage={selectedFilters?.page}
         dataLimit={dataLimit}
         setDataLimit={setDataLimit}
-        loading={usersLoading}
+        loading={invoiceLoading}
         handleSubmit={handleDataLimit}
-        data={{ pagination, data: users }}
+        data={{ pagination, data: invoices }}
       />
       <ConfirmationModal
         show={modalShow}
@@ -250,10 +265,10 @@ const Users = () => {
         heading={"Confirm Please"}
         contentHeading="Are you sure?"
         handleConfirm={handleStatusChange}
-        loading={userStatusLoading}
+        loading={invoiceStatusLoading}
       />
     </div>
   );
 };
 
-export default ProtectedRoute(Users);
+export default ProtectedRoute(Invoices);

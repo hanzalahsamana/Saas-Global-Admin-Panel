@@ -16,12 +16,12 @@ import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import { toggleUserStatus } from "@/API/user/toggleUserStatus";
 
 const storeColumns = [
-  "_id",
-  "storeName",
-  "storeStatus",
-  "subscriptionStatus",
-  "plan",
-  "createdAt",
+  { key: "_id", label: "Store Id" },
+  { key: "storeName", label: "Store Name" },
+  { key: "storeStatus", label: "Store Status" },
+  { key: "subscriptionStatus", label: "Subscription Status" },
+  { key: "plan", label: "Plan" },
+  { key: "createdAt", label: "Created At" },
 ];
 
 const statusRenderer = ({ value }) => {

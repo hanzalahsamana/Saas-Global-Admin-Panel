@@ -24,7 +24,7 @@ export const SubscriptionsProvider = ({ children }) => {
 
     const updateSubsStatus = (subscription) => {
         const updatedSubscriptions = subscriptions.map(s =>
-            s._id === subscription._id ? { ...s, status: subscription?.status } : s
+            s._id === subscription._id ? { ...s, status: subscription?.status, billingCycle: subscription?.billingCycle, subsStart: subscription?.subsStart, subsEnd: subscription?.subsEnd } : s
         );
         setSubscriptions(updatedSubscriptions);
         setSubsStatusLoading(false);

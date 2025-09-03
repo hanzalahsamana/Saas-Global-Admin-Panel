@@ -5,6 +5,7 @@ import {
   AnalyticsProvider,
 } from "@/Context/Analytics/analyticsContext";
 import { AuthProvider } from "@/Context/Authentication/AuthContext";
+import { InvoiceProvider } from "@/Context/Invoices/invoiceContext";
 import { EmailSuggestProvider } from "@/Context/SearchSuggest/emailSuggestContext";
 import { StoresSuggestProvider } from "@/Context/SearchSuggest/storesSuggestContext";
 import { StoresProvider } from "@/Context/Stores/storesContext";
@@ -19,15 +20,17 @@ const AllProviders = ({ children }) => {
   return (
     <AuthProvider>
       <StoresSuggestProvider>
-        <EmailSuggestProvider>
-          <AnalyticsProvider>
-            <UsersProvider>
-              <StoresProvider>
-                <SubscriptionsProvider>{children} </SubscriptionsProvider>
-              </StoresProvider>
-            </UsersProvider>
-          </AnalyticsProvider>
-        </EmailSuggestProvider>
+        <InvoiceProvider>
+          <EmailSuggestProvider>
+            <AnalyticsProvider>
+              <UsersProvider>
+                <StoresProvider>
+                  <SubscriptionsProvider>{children} </SubscriptionsProvider>
+                </StoresProvider>
+              </UsersProvider>
+            </AnalyticsProvider>
+          </EmailSuggestProvider>
+        </InvoiceProvider>
       </StoresSuggestProvider>
     </AuthProvider>
   );

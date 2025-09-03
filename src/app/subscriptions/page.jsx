@@ -16,15 +16,14 @@ import { SubscriptionsContext } from "@/Context/Subscription/subscriptionsContex
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
 const columns = [
-  "_id",
-  "email",
-  "storeName",
-  "status",
-  "billingCycle",
-  "amount",
-  "subsStart",
-  "subsEnd",
-  "createdAt",
+  { key: "_id", label: "Subscription Id" },
+  { key: "email", label: "Email" },
+  { key: "storeName", label: "Store Name" },
+  { key: "status", label: "Status" },
+  { key: "billingCycle", label: "Billing Cycle" },
+  { key: "subsStart", label: "Subscription Start" },
+  { key: "subsEnd", label: "Subscription End" },
+  { key: "createdAt", label: "Created At" },
 ];
 
 const statusData = [
@@ -86,19 +85,26 @@ const Subscriptions = () => {
   } = useContext(StoresSuggestContext);
 
   const tableActions = (data) => {
-    if (data?.status === "trial" || data?.status === "trial expired") {
-      return [""];
+    const status = data?.status;
+
+    if (["trial", "trial expired"].includes(status)) return [""];
+
+    if (status === "pending") {
+      return ["Active", "Cancel"].map((label) => ({
+        label,
+        onClick: (row) => {
+          setModalShow(true);
+          setSelectedSubscription(row);
+        },
+      }));
     }
+
+    const label =
+      status === "cancelled" ? "Active" : status === "active" ? "Cancel" : "";
 
     return [
       {
-        label:
-          data?.status === "pending" || data?.status === "cancelled"
-            ? "Active"
-            : data.status === "active"
-            ? "Cancel"
-            : "",
-
+        label,
         onClick: (row) => {
           setModalShow(true);
           setSelectedSubscription(row);

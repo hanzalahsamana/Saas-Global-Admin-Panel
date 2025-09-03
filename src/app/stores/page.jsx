@@ -16,13 +16,12 @@ import { StoresContext } from "@/Context/Stores/storesContext";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
 const columns = [
-  "_id",
-  "storeName",
-  "email",
-  "createdAt",
-  "plan",
-  "storeStatus",
-  "subscriptionStatus",
+  { key: "_id", label: "Store Id" },
+  { key: "storeName", label: "Store Name" },
+  { key: "email", label: "Created At" },
+  { key: "createdAt", label: "Created At" },
+  { key: "storeStatus", label: "Store Status" },
+  { key: "subscriptionStatus", label: "Subscription Status" },
 ];
 
 const subscriptionStatus = [
@@ -32,8 +31,6 @@ const subscriptionStatus = [
   { label: "Active", value: "active" },
   { label: "Cancelled", value: "cancelled" },
 ];
-
-const subsStatusRenderer = ({ value }) => {};
 
 const renderers = {
   storeStatus: ({ value }) => {
@@ -47,7 +44,7 @@ const renderers = {
           statusColors[value] || "bg-gray-100 text-gray-600"
         }`}
       >
-        {value}
+        {value || "-"}
       </span>
     );
   },
@@ -63,10 +60,10 @@ const renderers = {
     return (
       <span
         className={`text-xs px-4 py-1 rounded-sm font-medium ${
-          statusColors[value] || "bg-gray-100 text-gray-600"
+          statusColors[value] || "text-textC"
         }`}
       >
-        {value}
+        {value || "-"}
       </span>
     );
   },

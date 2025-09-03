@@ -24,7 +24,7 @@ const Table = ({
             <tr>
               {columns.map((col, idx) => (
                 <th key={idx} className="px-4 py-3 whitespace-nowrap">
-                  {formatHeading(col)}
+                  {col?.label}
                 </th>
               ))}
               {actions.length > 0 && (
@@ -46,8 +46,8 @@ const Table = ({
                       }  cursor-pointer transition-all duration-500 hover:bg-backgroundC text-textC `}
                     >
                       {columns.map((col, colIdx) => {
-                        const value = row[col];
-                        const Renderer = renderers[col];
+                        const value = row[col?.key];
+                        const Renderer = renderers[col?.key];
                         return (
                           <td
                             key={colIdx}
@@ -56,9 +56,9 @@ const Table = ({
                             {Renderer ? (
                               <Renderer value={value} row={row} />
                             ) : value || value === 0 ? (
-                              col === "createdAt" ||
-                              col === "subsStart" ||
-                              col === "subsEnd" ? (
+                              col?.key === "createdAt" ||
+                              col?.key === "subsStart" ||
+                              col?.key === "subsEnd" ? (
                                 value.split("T")[0]
                               ) : (
                                 <span title={value}>
@@ -76,12 +76,16 @@ const Table = ({
                       {actions.length > 0 && (
                         <td className="px-4 py-2 flex gap-2 whitespace-nowrap">
                           {rowActions.map((action, aIdx) => {
-                            // if (!action.label) return;
                             console.log("action", action);
                             return action ? (
                               <Button
                                 key={aIdx}
-                                action={() => action.onClick(row)}
+                                action={() =>
+                                  action.onClick({
+                                    ...row,
+                                    label: action?.label,
+                                  })
+                                }
                                 variant="outline"
                                 className="!text-xs !py-2 !rounded-sm"
                                 label={action.label}
