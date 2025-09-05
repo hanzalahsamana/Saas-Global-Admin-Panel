@@ -20,7 +20,7 @@ const columns = [
   { key: "_id", label: "User Id" },
   { key: "email", label: "Email" },
   { key: "status", label: "Status" },
-  { key: "createdAt", label: "Created At" },
+  { key: "createdAt", label: "Created At", type: "date" },
   { key: "totalStores", label: "Total Stores" },
 ];
 
@@ -114,18 +114,27 @@ const Users = () => {
   const handleStatusSelect = (value) => {
     handleSelectFilter({ status: value });
   };
-
   const actions = (user) => [
     {
       label: "View",
       onClick: () => router.push(`/users/${user._id}`),
+      disabled: false,
     },
     {
-      label: user.status === "Suspended" ? "Active" : "Suspend",
+      label: "Active",
       onClick: (row) => {
         setModalShow(true);
         setSelectedUser(row);
       },
+      disabled: user.status === "Active",
+    },
+    {
+      label: "Suspend",
+      onClick: (row) => {
+        setModalShow(true);
+        setSelectedUser(row);
+      },
+      disabled: user.status === "Suspended",
     },
   ];
 

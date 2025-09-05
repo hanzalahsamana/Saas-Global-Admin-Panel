@@ -2,13 +2,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Base_URL } from "../../../config";
 
-export const toggleSubsStatus = async (token, data, setData, setLoading) => {
+export const toggleInvoiceStatus = async (
+  token,
+  data,
+  updateStatus,
+  setLoading
+) => {
   try {
     setLoading(true);
-    const apiUrl = `${Base_URL}/subscriptions/status-toggle`;
+    const apiUrl = `${Base_URL}/invoice/${data?.id}/status-toggle`;
     const response = await axios.put(
       apiUrl,
-      { status: data?.status, subscriptionIds: data?.id },
+      { status: data?.status },
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -16,8 +21,8 @@ export const toggleSubsStatus = async (token, data, setData, setLoading) => {
       }
     );
     const res = response.data;
-    setData(res?.data);
-    toast.success(res?.message || `Subscription ${data?.status} successfully!`);
+    updateStatus(res.updatedInvoice);
+    toast.success(res.message || "User");
     return res;
   } catch (error) {
     toast.error(error?.response?.data?.message || error?.message);

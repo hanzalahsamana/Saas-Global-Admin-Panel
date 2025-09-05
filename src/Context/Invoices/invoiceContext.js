@@ -16,14 +16,17 @@ export const InvoiceProvider = ({ children }) => {
   const [invoiceLoading, setInvoiceLoading] = useState(true);
   const [invoiceStatusLoading, setInvoiceStatusLoading] = useState(false);
 
-  const handleInvoices = (newUsers) => {
-    setInvoices(newUsers);
+  const handleInvoices = (invoices) => {
+    setInvoices(invoices?.data);
+    setPagination(invoices?.pagination);
     setInvoiceLoading(false);
   };
 
   const updateInvoiceStatus = (user) => {
-    const updatedUsers = invoices.map((u) => (u._id === user._id ? user : u));
-    setInvoices(updatedUsers);
+    const updatedInvoice = invoices.map((u) =>
+      u._id === user._id ? { ...u, status: user?.status } : u
+    );
+    setInvoices(updatedInvoice);
     setInvoiceStatusLoading(false);
   };
 
@@ -35,7 +38,6 @@ export const InvoiceProvider = ({ children }) => {
         invoices,
         pagination,
         handleInvoices,
-        setPagination,
         setInvoiceLoading,
         updateInvoiceStatus,
         setInvoiceStatusLoading,

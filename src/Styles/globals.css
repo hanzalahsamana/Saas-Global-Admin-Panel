@@ -155,17 +155,17 @@ body {
 /* scroll bar styling  */
 .custom-scrollbar::-webkit-scrollbar {
   width: 2px;
-  height: 5px;
+  height: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #a6a6a6;
-  border-radius: 6px;
+  border-radius: 5px;
   height: 20px;
 }
 

@@ -3,13 +3,14 @@ import { fetchStoresSuggest } from "@/API/SearchSuggest/getStoresName";
 import { fetchSubscriptions } from "@/API/subscriptions/getSubscriptions";
 import { toggleSubsStatus } from "@/API/subscriptions/toggleSubscriptionStatus";
 import ProtectedRoute from "@/AuthenticRouting/ProtectedRoutes";
+import Button from "@/Components/Actions/Button";
 import { Datepicker } from "@/Components/Actions/DatePicker";
-import CustomDropdown from "@/Components/Actions/DropDown";
 import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import ConfirmationModal from "@/Components/Modals/ConfirmationModal";
 import SearchBar from "@/Components/Search/SearchBar";
 import Table from "@/Components/Tables/Table";
 import TablePagination from "@/Components/Tables/tablePagination";
+import { TableTabs } from "@/Components/Tables/tableTabs";
 import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { StoresSuggestContext } from "@/Context/SearchSuggest/storesSuggestContext";
 import { SubscriptionsContext } from "@/Context/Subscription/subscriptionsContext";
@@ -21,12 +22,13 @@ const columns = [
   { key: "storeName", label: "Store Name" },
   { key: "status", label: "Status" },
   { key: "billingCycle", label: "Billing Cycle" },
-  { key: "subsStart", label: "Subscription Start" },
-  { key: "subsEnd", label: "Subscription End" },
-  { key: "createdAt", label: "Created At" },
+  { key: "subsStart", label: "Subscription Start", type: "date" },
+  { key: "subsEnd", label: "Subscription End", type: "date" },
+  { key: "createdAt", label: "Created At", type: "date" },
 ];
 
 const statusData = [
+  { label: "All", value: "all" },
   { label: "Trial", value: "trial" },
   { label: "Trial Expired", value: "trial expired" },
   { label: "Pending", value: "pending" },
@@ -62,6 +64,7 @@ const Subscriptions = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     limit: dataLimit,
     page: 1,
+    status: "all",
   });
   const [dateRange, setDateRange] = useState([null, null]);
 
@@ -76,6 +79,7 @@ const Subscriptions = () => {
     updateSubsStatus,
     setSubsStatusLoading,
     subsStatusLoading,
+    counts,
   } = useContext(SubscriptionsContext);
   const {
     storesSuggests,
@@ -87,35 +91,54 @@ const Subscriptions = () => {
   const tableActions = (data) => {
     const status = data?.status;
 
-    if (["trial", "trial expired"].includes(status)) return [""];
-
-    if (status === "pending") {
-      return ["Active", "Cancel"].map((label) => ({
-        label,
-        onClick: (row) => {
-          setModalShow(true);
-          setSelectedSubscription(row);
-        },
-      }));
-    }
-
-    const label =
-      status === "cancelled" ? "Active" : status === "active" ? "Cancel" : "";
-
-    return [
-      {
-        label,
-        onClick: (row) => {
-          setModalShow(true);
-          setSelectedSubscription(row);
-        },
+    return ["Active", "Cancel"].map((label) => ({
+      label,
+      onClick: (row) => {
+        setModalShow(true);
+        setSelectedSubscription(row);
       },
-    ];
+      disabled:
+        ["trial", "trial expired"].includes(status) ||
+        (label === "Active" && status === "active") ||
+        (label === "Cancel" && status === "cancelled"),
+    }));
+  };
+  const statuses =
+    Array.isArray(selectedSubscription) && selectedSubscription.length > 0
+      ? selectedSubscription.map((s) => s?.status?.toLowerCase())
+      : [];
+
+  const noStatus = statuses.length === 0;
+
+  const handleCheckBoxAction = (label) => {
+    const updatedSubscription = selectedSubscription.map((s, i) => ({
+      ...s,
+      label,
+    }));
+    setSelectedSubscription(updatedSubscription);
+    setModalShow(true);
   };
 
-  const handleStatusSelect = (value) => {
-    handleSelectFilter({ status: value });
-  };
+  const checkBoxActions = [
+    {
+      label: "Active",
+      onClick: handleCheckBoxAction,
+      disabled:
+        noStatus ||
+        statuses.includes("trial") ||
+        statuses.includes("trial expired") ||
+        statuses.includes("active"),
+    },
+    {
+      label: "Cancel",
+      onClick: handleCheckBoxAction,
+      disabled:
+        noStatus ||
+        statuses.includes("trial") ||
+        statuses.includes("trial expired") ||
+        statuses.includes("cancelled"),
+    },
+  ];
 
   const handleSearch = async (value) => {
     setSearchValue(value);
@@ -181,22 +204,49 @@ const Subscriptions = () => {
   };
 
   const handleModalConfirm = async () => {
-    await toggleSubsStatus(
-      token,
-      {
-        id: selectedSubscription?._id,
-        status:
-          selectedSubscription?.status === "pending"
-            ? "active"
-            : selectedSubscription?.status === "active"
-            ? "cancelled"
-            : "active",
-      },
-      updateSubsStatus,
-      setSubsStatusLoading
-    );
+    let data = { id: [], status: "" };
+    if (Array.isArray(selectedSubscription)) {
+      data.id = selectedSubscription.map((item) => item?._id);
+      data.status = selectedSubscription[0]?.label;
+    } else if (selectedSubscription?._id) {
+      data.id = [selectedSubscription._id];
+      data.status = selectedSubscription?.label;
+    }
+    await toggleSubsStatus(token, data, updateSubsStatus, setSubsStatusLoading);
+    setSelectedSubscription({});
     setModalShow(false);
   };
+
+  const handleCheckbox = (e, row) => {
+    if (e.target.checked) {
+      if (Array.isArray(selectedSubscription)) {
+        setSelectedSubscription([...selectedSubscription, row]);
+      } else {
+        setSelectedSubscription([row]);
+      }
+    } else {
+      if (Array.isArray(selectedSubscription)) {
+        setSelectedSubscription(
+          selectedSubscription.filter((r) => r._id !== row._id)
+        );
+      } else {
+        setSelectedSubscription(null);
+      }
+    }
+  };
+
+  const handleCheckboxSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedSubscription(subscriptions);
+    } else {
+      setSelectedSubscription({});
+    }
+  };
+
+  const isCheckbox =
+    selectedFilters.status !== "all" &&
+    selectedFilters.status !== "trial" &&
+    selectedFilters.status !== "trial expired";
   return (
     <div className="p-6 space-y-6 min-h-[calc(100vh-50px)] flex flex-col">
       <div className="flex flex-col md:flex-row justify-between w-full">
@@ -209,37 +259,61 @@ const Subscriptions = () => {
           suggestData={storesSuggests}
           loading={storesSuggestsLoading}
           isDisabled={!searchValue}
-          tooltipText={"Please enter a value in search bar!"}
+          tooltipText={"Please ente a value in search bar!"}
         />
-        <div className="flex items-center justify-end gap-x-2 w-full">
-          <div>
-            <Datepicker
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              placeholderText="Select Date"
-            />
-          </div>
-          <CustomDropdown
-            dropdownData={statusData}
-            dropdownHeading={
-              selectedFilters.status ? selectedFilters?.status : "Status"
-            }
-            handleClick={handleStatusSelect}
-          />{" "}
+        <div>
+          <Datepicker
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            placeholderText="Select Date"
+          />
         </div>
       </div>
       <SelectedFilters
         selectedFilters={selectedFilters}
         handleRemove={handleFilterRemove}
         handleClearAll={handleClearAll}
+        hideFilter={["limit", "page", "status"]}
       />
-      <Table
-        columns={columns}
-        data={subscriptions}
-        actions={tableActions}
-        renderers={{ status: statusRenderer }}
-        loading={subscriptionLoading}
-      />
+      <div className="grow">
+        <div className="flex justify-between items-center mb-1">
+          <TableTabs
+            tabs={statusData}
+            activeTabLength={counts}
+            setActiveTab={(v) => handleSelectFilter({ status: v })}
+            activeTab={selectedFilters?.status}
+          />
+          <div>
+            {isCheckbox &&
+              checkBoxActions.map((action, aIdx) => {
+                return action ? (
+                  <Button
+                    key={aIdx}
+                    action={() => action.onClick(action?.label)}
+                    variant="outline"
+                    className="!text-xs !py-2 !rounded-sm !mr-2 !h-max"
+                    label={action.label}
+                    disabled={action?.disabled}
+                  />
+                ) : (
+                  <p key={aIdx}>-</p>
+                );
+              })}
+          </div>
+        </div>
+
+        <Table
+          columns={columns}
+          data={subscriptions}
+          actions={tableActions}
+          renderers={{ status: statusRenderer }}
+          loading={subscriptionLoading}
+          isCheckbox={isCheckbox}
+          handleCheckbox={handleCheckbox}
+          selectedData={selectedSubscription}
+          handleCheckboxSelectAll={handleCheckboxSelectAll}
+        />
+      </div>
       <TablePagination
         setCurrentPage={(page) => handleSelectFilter({ page })}
         currentPage={selectedFilters.page}
@@ -251,7 +325,10 @@ const Subscriptions = () => {
       />
       <ConfirmationModal
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        onHide={() => {
+          setSelectedSubscription({});
+          setModalShow(false);
+        }}
         content={`You want to ${
           selectedSubscription?.status === "pending" ||
           selectedSubscription?.status === "cancelled"

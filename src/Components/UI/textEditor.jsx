@@ -13,8 +13,6 @@ const TextEditor = ({ editorContent, setEditorContent, label, className }) => {
   const { setFieldValue, values } = useFormikContext();
   const [field, meta] = useField("body");
 
-  console.log("meta", meta);
-
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   const [isClient, setIsClient] = useState(false);

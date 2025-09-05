@@ -25,7 +25,6 @@ const storeColumns = [
 ];
 
 const statusRenderer = ({ value }) => {
-  console.log("value", value);
   const statusColors = {
     Active: "bg-green-100 text-green-700",
     Suspended: "bg-red-100 text-red-600",

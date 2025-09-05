@@ -13,10 +13,7 @@ export const fetchInvoices = async (token, setLoading, setData, filters) => {
       },
     });
     const invoices = response.data;
-    setData({
-      invoices: invoices?.data,
-      pagination: invoices?.pagination,
-    });
+    setData(invoices);
     return invoices;
   } catch (error) {
     toast.error(error?.response?.data?.message || error?.message);

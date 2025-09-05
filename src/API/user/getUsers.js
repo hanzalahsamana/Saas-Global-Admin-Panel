@@ -13,7 +13,6 @@ export const fetchUsers = async (token, setUsersLoading, setPagination, setUsers
             }
         });
         const users = response.data;
-        console.log("users", users)
         setUsers(users.data)
         setPagination(users.pagination)
         return users;

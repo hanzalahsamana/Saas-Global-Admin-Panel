@@ -9,27 +9,28 @@ import { Datepicker } from "@/Components/Actions/DatePicker";
 import CustomDropdown from "@/Components/Actions/DropDown";
 import SelectedFilters from "@/Components/Actions/SelectedFilters";
 import TablePagination from "@/Components/Tables/tablePagination";
-import { UsersContext } from "@/Context/Users/UsersContext";
-import { fetchUsers } from "@/API/user/getUsers";
 import { fetchEmailSuggest } from "@/API/SearchSuggest/getEmailSuggest";
 import { EmailSuggestContext } from "@/Context/SearchSuggest/emailSuggestContext";
-import { toggleUserStatus } from "@/API/user/toggleUserStatus";
 import { AuthContext } from "@/Context/Authentication/AuthContext";
 import { InvoiceContext } from "@/Context/Invoices/invoiceContext";
+import { fetchInvoices } from "@/API/Invoices/getInvoices";
+import { toggleInvoiceStatus } from "@/API/Invoices/toggleInvoiceStatus";
 
 const columns = [
-  { key: "_id", label: "User Id" },
+  { key: "serial", label: "No" },
+  { key: "_id", label: "Invoice Id" },
   { key: "email", label: "Email" },
   { key: "status", label: "Status" },
-  { key: "createdAt", label: "Created At" },
-  { key: "totalStores", label: "Total Stores" },
+  { key: "createdAt", label: "Created At", type: "date" },
+  { key: "amount", label: "Amount" },
+  { key: "imageUrl", label: "Image" },
 ];
 
 const statusRenderer = ({ value }) => {
   const statusColors = {
-    Paid: "bg-green-100 text-green-700",
-    Failed: "bg-red-100 text-red-600",
-    Pending: "bg-red-100 text-red-600",
+    paid: "bg-green-100 text-green-700",
+    failed: "bg-red-100 text-red-600",
+    pending: "bg-[#F2E4A0] text-[#A16213]",
   };
 
   return (
@@ -53,7 +54,7 @@ const Invoices = () => {
   // hooks
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedInvoice, setSelectedInvoice] = useState({});
   const [searchValue, setSearchValue] = useState("");
   const [dataLimit, setDataLimit] = useState(10);
   const [selectedFilters, setSelectedFilters] = useState({
@@ -68,12 +69,10 @@ const Invoices = () => {
     pagination,
     handleInvoices,
     setInvoiceLoading,
-    setPagination,
     updateInvoiceStatus,
     invoiceStatusLoading,
     setInvoiceStatusLoading,
   } = useContext(InvoiceContext);
-
   const {
     emailSuggests,
     emailSuggestsLoading,
@@ -119,29 +118,17 @@ const Invoices = () => {
   };
   const tableActions = (data) => {
     const status = data?.status;
-
-    if (status === "pending") {
-      return ["Paid", "Failed"].map((label) => ({
-        label,
-        onClick: (row) => {
-          setModalShow(true);
-          setSelectedSubscription(row);
-        },
-      }));
-    }
-
-    const label =
-      status === "failed" ? "Paid" : status === "paid" ? "Failed" : "";
-
-    return [
-      {
-        label,
-        onClick: (row) => {
-          setModalShow(true);
-          setSelectedSubscription(row);
-        },
+    const labels = ["Paid", "Failed"];
+    return labels.map((label) => ({
+      label,
+      onClick: (row) => {
+        setModalShow(true);
+        setSelectedInvoice(row);
       },
-    ];
+      disabled:
+        (status === "paid" && label === "Paid") ||
+        (status === "failed" && label === "Failed"),
+    }));
   };
 
   const handleSearch = async (value) => {
@@ -169,31 +156,30 @@ const Invoices = () => {
     setSelectedFilters({ limit: dataLimit, page: 1 });
   };
 
-  const getUsers = useCallback(async () => {
-    await fetchUsers(
+  const getInvoices = useCallback(async () => {
+    await fetchInvoices(
       token,
       setInvoiceLoading,
-      setPagination,
       handleInvoices,
       selectedFilters
     );
   }, [selectedFilters]);
 
   useEffect(() => {
-    getUsers();
-  }, [getUsers]);
+    getInvoices();
+  }, [getInvoices]);
 
   const handleDataLimit = () => {
     handleSelectFilter({ limit: dataLimit });
   };
 
   const handleStatusChange = async () => {
-    if (selectedUser?._id && modalShow) {
-      await toggleUserStatus(
+    if (selectedInvoice?._id && modalShow) {
+      await toggleInvoiceStatus(
         token,
         {
-          id: selectedUser?._id,
-          status: selectedUser?.status === "Active" ? "Suspended" : "Active",
+          id: selectedInvoice?._id,
+          status: selectedInvoice?.label,
         },
         updateInvoiceStatus,
         setInvoiceStatusLoading
@@ -260,7 +246,7 @@ const Invoices = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         content={`You want to ${
-          selectedUser?.status === "Active" ? "Suspend" : "Active"
+          selectedInvoice?.status === "Active" ? "Suspend" : "Active"
         } this user`}
         heading={"Confirm Please"}
         contentHeading="Are you sure?"

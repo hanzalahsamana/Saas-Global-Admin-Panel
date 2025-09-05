@@ -12,7 +12,6 @@ export const fetchAnalytics = async (handleAnalyticsLoading, handleAnalytics, to
             }
         });
         const analytics = response.data;
-        console.log("analytics", analytics)
         handleAnalytics(analytics.data)
         return analytics;
     } catch (error) {

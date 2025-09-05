@@ -23,7 +23,6 @@ const FormInput = ({
   const inputSizeClass = size === "small" ? "text-sm h-9" : "text-base h-11";
   const isFilled = field.value !== "" && field.value !== undefined;
   const error = meta.touched && meta.error;
-  // console.log("handleChange", handleChange);
   return (
     <div className="relative w-full mb-6">
       {layout === "label" && (

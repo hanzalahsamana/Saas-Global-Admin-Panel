@@ -18,8 +18,8 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 const columns = [
   { key: "_id", label: "Store Id" },
   { key: "storeName", label: "Store Name" },
-  { key: "email", label: "Created At" },
-  { key: "createdAt", label: "Created At" },
+  { key: "email", label: "Email" },
+  { key: "createdAt", label: "Created At", type: "date" },
   { key: "storeStatus", label: "Store Status" },
   { key: "subscriptionStatus", label: "Subscription Status" },
 ];
@@ -101,11 +101,20 @@ const Stores = () => {
 
   const actions = (store) => [
     {
-      label: store?.storeStatus === "Suspended" ? "Active" : "Suspend",
+      label: "Active",
       onClick: (row) => {
         setModalShow(true);
         setSelectedStore(row);
       },
+      disabled: store?.storeStatus === "Active",
+    },
+    {
+      label: "Suspend",
+      onClick: (row) => {
+        setModalShow(true);
+        setSelectedStore(row);
+      },
+      disabled: store?.storeStatus === "Suspended",
     },
   ];
 

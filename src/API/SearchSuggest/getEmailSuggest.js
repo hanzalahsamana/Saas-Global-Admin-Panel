@@ -12,7 +12,6 @@ export const fetchEmailSuggest = async (token, setEmailSuggests, setEmailSuggest
             }
         });
         const emailSuggests = response.data.data;
-        console.log("emailSuggests", emailSuggests)
         setEmailSuggests(emailSuggests)
         return emailSuggests;
     } catch (error) {
